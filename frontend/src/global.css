@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Pretendard+Variable:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=SUIT:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* fonts */
+  --culf-text-2: "Pretendard Variable";
+  --m3-label-medium: Roboto;
+  --font-suit: SUIT;
+  --font-inter: Inter;
+
+  /* font sizes */
+  --culf-text-2-size: 16px;
+  --m3-label-medium-size: 12px;
+  --culf-button-2-size: 14px;
+  --culf-title-3-size: 20px;
+  --culf-cardtitle-1-size: 18px;
+  --font-size-3xs: 10px;
+  --culf-title-2-size: 24px;
+  --font-size-mid: 17px;
+  --culf-title-1-size: 28px;
+
+  /* Colors */
+  --background-default: #fff;
+  --color-black: #000;
+  --box-default: #fbfbfb;
+  --line-highlight: #7d7d7d;
+  --text-sub: #767676;
+  --color-gray-100: #757575;
+  --text-default: #222;
+  --kakao-text: rgba(0, 0, 0, 0.85);
+  --color-gainsboro-100: #e6e6e6;
+  --color-gainsboro-200: #d9d9d9;
+  --line-line-strong: #aeaeae;
+  --text-guidetext: #a7a7a7;
+  --color-darkgray-100: #a3a3a3;
+  --text-text-disable: #999;
+  --line-less-highlight: #c9c9c9;
+  --keycolor-2: #6314e4;
+  --box-light: #f7f7f7;
+  --colors-backgrounds-light: #f5f5f5;
+  --color-whitesmoke-100: #f3f3f3;
+  --box-disable: rgba(234, 234, 234, 0.6);
+  --keycolor-5: #b6b4ff;
+  --pointcolor-red-default: #ff4a4a;
+  --pointcolor-red-dark: #bc2727;
+  --pointcolor-yellow-default: #f1ff55;
+  --pointcolor-yellow-dark: #bbc826;
+  --pointcolor-green-default: #18ff75;
+  --pointcolor-green-dark: #1cab55;
+  --pointcolor-blue-default: #4ae9ff;
+  --pointcolor-blue-dark: #088394;
+  --keycolor-3: #7b4fff;
+  --color-mistyrose: #ffdfd8;
+  --kakao-bg: #fee500;
+  --naver-bg: #03c75a;
+  --keycolor-4: #8381ff;
+  --color-papayawhip: #fff1d5;
+  --color-darkslategray: #474747;
+  --color-dimgray: #717171;
+
+  /* Gaps */
+  --gap-9xs: 4px;
+  --gap-5xs: 8px;
+  --gap-xl: 20px;
+  --gap-base: 16px;
+  --gap-3xs: 10px;
+  --gap-11xs: 2px;
+  --gap-7xs: 6px;
+  --gap-xs: 12px;
+  --gap-8xs: 5px;
+  --gap-mid: 17px;
+  --gap-13xl: 32px;
+  --gap-70xl: 89px;
+
+  /* Paddings */
+  --padding-xl: 20px;
+  --padding-3xs: 10px;
+  --padding-9xs: 4px;
+  --padding-3xl: 22px;
+  --padding-2xs: 11px;
+  --padding-xs: 12px;
+  --padding-11xs: 2px;
+  --padding-7xs: 6px;
+  --padding-base: 16px;
+  --padding-10xs: 3px;
+  --padding-5xs: 8px;
+  --padding-sm: 14px;
+  --padding-5xl: 24px;
+  --padding-mini: 15px;
+  --padding-8xs: 5px;
+  --padding-16xl: 35px;
+  --padding-11xl: 30px;
+
+  /* Border radiuses */
+  --br-xl: 20px;
+  --br-3xs: 10px;
+  --br-base: 16px;
+  --br-xs: 12px;
+  --br-11xs: 2px;
+  --br-980xl: 999px;
+  --br-10xs: 3px;
+  --br-9xs: 4px;
+  --br-7xs: 6px;
+  --br-5xs: 8px;
+  --br-4xs: 9px;
+}
