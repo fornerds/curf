@@ -74,46 +74,48 @@ export function Homepage() {
         onMenuClick={() => console.log('메뉴 열기')}
       />
       <Tab tabs={tabs} defaultActiveTab="subscription" />
-      <Link to="/mypage" className={styles.link}>
-        <LeftIcon />
-        마이페이지 이동
-      </Link>
-      <Button size="size1" variant="default">
-        기본 버튼
-      </Button>
-      <Button size="size2" variant="plus_icon">
-        <LeftIcon /> 추가하기
-      </Button>
-      <Button
-        size="size3"
-        variant="less-highlight"
-        className={styles.customWidth}
-      >
-        덜 강조된 버튼
-      </Button>
-      <Button size="size4" variant="warning">
-        경고
-      </Button>
-      <Button size="size2" variant="disable">
-        비활성화
-      </Button>
-      <Input placeholder="기본 입력" />
-      <Input
-        type="email"
-        placeholder="이메일 주소"
-        value={email}
-        onChange={handleEmailChange}
-      />
-      {emailError && (
-        <div className={styles.errorMessageWrap}>
-          <WarningIcon />
-          <p className={`${styles.errorMessage} font-guidetext`}>
-            {emailError}
-          </p>
-        </div>
-      )}
-      <Input placeholder="비활성화" disabled />
-      <Input placeholder="커스텀 너비" className={styles.customWidth} />
+      <main className={styles.main}>
+        <Link to="/mypage" className={styles.link}>
+          <LeftIcon />
+          마이페이지 이동
+        </Link>
+        <Button size="size1" variant="default">
+          기본 버튼
+        </Button>
+        <Button size="size2" variant="plus_icon">
+          <LeftIcon /> 추가하기
+        </Button>
+        <Button
+          size="size3"
+          variant="less-highlight"
+          className={styles.customWidth}
+        >
+          덜 강조된 버튼
+        </Button>
+        <Button size="size4" variant="warning">
+          경고
+        </Button>
+        <Button size="size2" variant="disable">
+          비활성화
+        </Button>
+        <Input placeholder="기본 입력" />
+        <Input
+          type="email"
+          placeholder="이메일 주소"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        {emailError && (
+          <div className={styles.errorMessageWrap}>
+            <WarningIcon />
+            <p className={`${styles.errorMessage} font-guidetext`}>
+              {emailError}
+            </p>
+          </div>
+        )}
+        <Input placeholder="비활성화" disabled />
+        <Input placeholder="커스텀 너비" className={styles.customWidth} />
+      </main>
     </>
   );
 }

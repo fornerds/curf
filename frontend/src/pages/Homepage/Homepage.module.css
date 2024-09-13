@@ -19,3 +19,10 @@
 .errorMessage {
   color: var(--pointcolor-red-default);
 }
+
+.main {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 10px;
+  box-sizing: border-box;
+}
