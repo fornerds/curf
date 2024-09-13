@@ -1,0 +1,30 @@
+.link {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.button {
+  display: flex;
+  width: 335px;
+  padding: 16px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px 16px 0px 16px;
+  border: 1px solid var(--line-stay-the-same, #222);
+  background: var(--keycolor-2, #6314e4);
+  color: var(--text-on-keycolor, #fff);
+  text-align: center;
+}
+
+.input {
+  display: flex;
+  width: 335px;
+  padding: 12px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 0px 12px 12px 12px;
+  border: 1px solid var(--line-highlight, #7d7d7d);
+  background: var(--box-default, #fbfbfb);
+}

@@ -5,27 +5,30 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import NotificationDetail from "./pages/NotificationDetail";
-import PaymentCancel from "./pages/PaymentCancel";
-import SubscriptionManagement from "./pages/SubscriptionManagement";
-import Payment from "./pages/Payment";
-import Notification1 from "./pages/Notification1";
-import AccountManagement from "./pages/AccountManagement";
-import Inquiries from "./pages/Inquiries";
-import DeleteAccount from "./pages/DeleteAccount";
-import AddPayment from "./pages/AddPayment";
-import TermsAgreement from "./pages/TermsAgreement";
-import FindEmail from "./pages/FindEmail";
-import FindPassword from "./pages/FindPassword";
-import PaymentHistory from "./pages/PaymentHistory";
-import SignupDone from "./pages/SignupDone";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import Chat1 from "./pages/Chat1";
-import Announcement from "./pages/Announcement";
-import PaymentItem from "./pages/PaymentItem";
-import Button4 from "./components/Button4";
+import { Homepage } from "./pages/Homepage";
+import { Mypage } from "./pages/Mypage";
+// AI가 만든 페이지
+import Home from "./_pages/Home";
+import NotificationDetail from "./_pages/NotificationDetail";
+import PaymentCancel from "./_pages/PaymentCancel";
+import SubscriptionManagement from "./_pages/SubscriptionManagement";
+import Payment from "./_pages/Payment";
+import Notification1 from "./_pages/Notification1";
+import AccountManagement from "./_pages/AccountManagement";
+import Inquiries from "./_pages/Inquiries";
+import DeleteAccount from "./_pages/DeleteAccount";
+import AddPayment from "./_pages/AddPayment";
+import TermsAgreement from "./_pages/TermsAgreement";
+import FindEmail from "./_pages/FindEmail";
+import FindPassword from "./_pages/FindPassword";
+import PaymentHistory from "./_pages/PaymentHistory";
+import SignupDone from "./_pages/SignupDone";
+import Signup from "./_pages/Signup";
+import Login from "./_pages/Login";
+import Chat1 from "./_pages/Chat1";
+import Announcement from "./_pages/Announcement";
+import PaymentItem from "./_pages/PaymentItem";
+import Button4 from "./_components/Button4";
 
 function App() {
   const action = useNavigationType();
@@ -145,30 +148,33 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/notification-detail" element={<NotificationDetail />} />
-      <Route path="/payment-cancel" element={<PaymentCancel />} />
+      <Route path="/" element={<Homepage />} />
+      <Route path="/mypage" element={<Mypage />} />
+      {/* AI가 만든 페이지목록 */}
+      <Route path="/ai/" element={<Home />} />
+      <Route path="/ai/notification-detail" element={<NotificationDetail />} />
+      <Route path="/ai/payment-cancel" element={<PaymentCancel />} />
       <Route
-        path="/subscription-management"
+        path="/ai/subscription-management"
         element={<SubscriptionManagement />}
       />
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/notification" element={<Notification1 />} />
-      <Route path="/account-management" element={<AccountManagement />} />
-      <Route path="/inquiries" element={<Inquiries />} />
-      <Route path="/delete-account" element={<DeleteAccount />} />
-      <Route path="/add-payment" element={<AddPayment />} />
-      <Route path="/terms-agreement" element={<TermsAgreement />} />
-      <Route path="/find-email" element={<FindEmail />} />
-      <Route path="/find-password" element={<FindPassword />} />
-      <Route path="/payment-history" element={<PaymentHistory />} />
-      <Route path="/signup-done" element={<SignupDone />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/chat" element={<Chat1 />} />
-      <Route path="/announcement" element={<Announcement />} />
-      <Route path="/payment-item" element={<PaymentItem />} />
-      <Route path="/" element={<Button4 />} />
+      <Route path="/ai/payment" element={<Payment />} />
+      <Route path="/ai/notification" element={<Notification1 />} />
+      <Route path="/ai/account-management" element={<AccountManagement />} />
+      <Route path="/ai/inquiries" element={<Inquiries />} />
+      <Route path="/ai/delete-account" element={<DeleteAccount />} />
+      <Route path="/ai/add-payment" element={<AddPayment />} />
+      <Route path="/ai/terms-agreement" element={<TermsAgreement />} />
+      <Route path="/ai/find-email" element={<FindEmail />} />
+      <Route path="/ai/find-password" element={<FindPassword />} />
+      <Route path="/ai/payment-history" element={<PaymentHistory />} />
+      <Route path="/ai/signup-done" element={<SignupDone />} />
+      <Route path="/ai/signup" element={<Signup />} />
+      <Route path="/ai/login" element={<Login />} />
+      <Route path="/ai/chat" element={<Chat1 />} />
+      <Route path="/ai/announcement" element={<Announcement />} />
+      <Route path="/ai/payment-item" element={<PaymentItem />} />
+      <Route path="/ai/" element={<Button4 />} />
     </Routes>
   );
 }

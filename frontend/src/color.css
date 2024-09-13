@@ -1,0 +1,45 @@
+:root {
+  /* Background */
+  --background-dark: #2c2c2c;
+  --background-default: #ffffff;
+
+  /* Key Colors */
+  --keycolor-1: #3c009d;
+  --keycolor-2: #6314e4;
+  --keycolor-3: #9086ff;
+  --keycolor-4: #cfcfff;
+  --keycolor-5: #b6b4ff;
+
+  /* Sub Colors */
+  --sub-color-1: #ff9b26;
+  --sub-color-2: #fbae17;
+  --sub-color-3: #ffd076;
+  --sub-color-4: #fff1d5;
+
+  /* Box Colors */
+  --box-default: #fbfbfb;
+  --box-sub: #f7f7f799;
+  --box-disable: #eaeaeacc;
+  --box-dark: #aeaeae;
+
+  /* Line Colors */
+  --line-stay-the-same: #222222;
+  --line-highlight: #7d7d7d;
+  --line-less-highlight: #c9c9c9;
+
+  /* Text Colors */
+  --text-default: #222222;
+  --text-sub: #767676;
+  --text-guidetext: #a7a7a7;
+  --text-on-keycolor: #ffffff;
+
+  /* Point Colors */
+  --pointcolor-blue-default: #4ae9ff;
+  --pointcolor-blue-dark: #088394;
+  --pointcolor-green-default: #18ff75;
+  --pointcolor-green-dark: #1cab55;
+  --pointcolor-red-default: #ff4a4a;
+  --pointcolor-red-dark: #bc2626;
+  --pointcolor-yellow-default: #f1ff55;
+  --pointcolor-yellow-dark: #bbc826;
+}
