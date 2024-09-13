@@ -1,0 +1,51 @@
+.button {
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  background-color: transparent;
+}
+
+.small {
+  border-radius: 5px;
+  padding: 6px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.big {
+  width: 160px;
+  padding: 10px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 6px;
+}
+
+.lessEmphasize {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.default {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.disable {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.active {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #00b3a6;
+  color: rgba(255, 255, 255, 0.85);
+}
