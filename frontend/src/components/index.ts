@@ -1,3 +1,5 @@
 export { Button } from './Button';
-export { Input, Toggle, CheckBox } from './Input';
+export { Input } from './Input';
 export { Link } from './Link';
+export { Layout } from './Layout';
+export { Header } from './Header';
