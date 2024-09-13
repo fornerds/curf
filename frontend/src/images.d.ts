@@ -1,12 +1,13 @@
-// 사용할 이미지의 확장자 모두 등록
-declare module '*.png';
+declare module '*.png' {
+  const value: string;
+  export default value;
+}
 declare module '*.jpg';
 declare module '*.jpeg';
 declare module '*.webp';
 declare module '*.gif';
+declare module '*.svg?react';
 declare module '*.svg' {
-  import React = require('react');
-  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  const src: string;
-  export default src;
+  const value: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  export default value;
 }

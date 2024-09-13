@@ -1,39 +1,85 @@
-import React, { InputHTMLAttributes } from 'react'
-import styles from './Input.module.css'
-import { check } from 'prettier'
+import React, { useState, useRef, useEffect } from 'react';
+import styles from './Input.module.css';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error?: string
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'danger'
-    | 'success'
-    | 'warning'
-    | 'info'
-    | ''
-  className?: string
-  type?: string
-  checked?: boolean
+interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  className?: string;
+  type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'url';
+  onChange?: (value: string) => void;
 }
 
 export function Input({
-  error,
-  variant = '',
-  className = '',
+  className,
+  disabled,
   type = 'text',
-  checked,
+  value: propValue,
+  onChange,
   ...props
 }: InputProps) {
-  const inputClass = `${styles.input} ${styles[variant]} ${className}`
-  const errorClass = error ? styles.error : ''
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (propValue !== undefined) {
+      setInputValue(propValue.toString());
+    }
+  }, [propValue]);
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
+
+  const clearInput = () => {
+    setInputValue('');
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      inputRef.current.focus();
+    }
+    if (onChange) {
+      onChange('');
+    }
+  };
+
+  const inputClass = `
+    ${styles.input}
+    ${isFocused ? styles.focused : ''}
+    ${inputValue ? styles.hasValue : ''}
+    ${disabled ? styles.disabled : ''}
+    ${className || ''}
+  `.trim();
 
   return (
-    <input
-      className={`${inputClass} ${errorClass}`}
-      {...props}
-      type={type}
-      checked={checked}
-    />
-  )
+    <div className={styles.inputWrapper}>
+      <div className={inputClass}>
+        <input
+          ref={inputRef}
+          {...props}
+          type={type}
+          value={inputValue}
+          className={styles.inputElement}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          disabled={disabled}
+        />
+        {inputValue && !disabled && type !== 'password' && (
+          <button
+            type="button"
+            className={styles.clearButton}
+            onClick={clearInput}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }

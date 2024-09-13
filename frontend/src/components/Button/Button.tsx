@@ -1,37 +1,33 @@
-import React, { ReactNode, MouseEvent } from 'react';
+import React from 'react';
 import styles from './Button.module.css';
 
-interface ButtonProps {
-  children: ReactNode;
-  type?: 'button' | 'submit' | 'reset';
-  variant?: 'lessEmphasize' | 'default' | 'disable' | 'active' | '';
-  size?: 'small' | 'big' | '';
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
+type ButtonSize = 'size1' | 'size2' | 'size3' | 'size4';
+type ButtonVariant =
+  | 'default'
+  | 'plus_icon'
+  | 'less-highlight'
+  | 'warning'
+  | 'disable';
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: ButtonSize;
+  variant?: ButtonVariant;
   className?: string;
-  itemID?: string;
+  children: React.ReactNode;
 }
 
 export function Button({
+  size = 'size1',
+  variant = 'default',
+  className,
   children,
-  type = 'button',
-  onClick,
-  disabled = false,
-  size = '',
-  variant = '',
-  className = '',
-  itemID = '',
+  ...props
 }: ButtonProps) {
-  const buttonClass = `${styles.button} ${styles[size]} ${styles[variant]} ${className}`;
+  const buttonClass =
+    `${styles.button} ${styles[size]} ${styles[variant]} ${className || ''}`.trim();
 
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={buttonClass}
-      itemID={itemID}
-    >
+    <button className={buttonClass} {...props}>
       {children}
     </button>
   );

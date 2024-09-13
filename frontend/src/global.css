@@ -5,6 +5,10 @@
   src: url(./assets/fonts/PretendardVariable.woff2) format('woff2');
 }
 
+:root {
+  --max-width: 600px;
+}
+
 /* 폰트 설정 */
 
 .font-hero-banner-1 {
