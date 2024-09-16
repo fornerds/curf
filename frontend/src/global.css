@@ -1,19 +1,144 @@
-@import url("https://fonts.googleapis.com/css2?family=Pretendard+Variable:wght@400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=SUIT:wght@600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+@import './color.css';
+
+@font-face {
+  font-family: 'PretendardVariable';
+  src: url(./assets/fonts/PretendardVariable.woff2) format('woff2');
+}
+
+:root {
+  --max-width: 600px;
+}
+
+/* 폰트 설정 */
+
+.font-hero-banner-1 {
+  font-family: 'PretendardVariable';
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 29.52px;
+}
+
+.font-hero-banner-2 {
+  font-family: 'PretendardVariable';
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 29.52px;
+}
+
+.font-title-1 {
+  font-family: 'PretendardVariable';
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 42px;
+}
+
+.font-title-2 {
+  font-family: 'PretendardVariable';
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32.4px;
+}
+
+.font-title-3 {
+  font-family: 'PretendardVariable';
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.font-card-title-1 {
+  font-family: 'PretendardVariable';
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22.14px;
+}
+
+.font-card-title-2 {
+  font-family: 'PretendardVariable';
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 19.68px;
+}
+
+.font-button-1 {
+  font-family: 'PretendardVariable';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19.68px;
+}
+
+.font-button-2 {
+  font-family: 'PretendardVariable';
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 17.22px;
+}
+
+.font-text-1 {
+  font-family: 'PretendardVariable';
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+}
+
+.font-text-2 {
+  font-family: 'PretendardVariable';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.font-text-3 {
+  font-family: 'PretendardVariable';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.font-text-4 {
+  font-family: 'PretendardVariable';
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.font-guidetext {
+  font-family: 'PretendardVariable';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.font-tag-1 {
+  font-family: 'PretendardVariable';
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+}
+
+.font-tag-2 {
+  font-family: 'PretendardVariable';
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14.76px;
+}
+
+/* AI 설정 코드 */
+
+@import url('https://fonts.googleapis.com/css2?family=Pretendard+Variable:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SUIT:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 body {
   margin: 0;
   line-height: normal;
 }
 :root {
-  /* fonts */
-  --culf-text-2: "Pretendard Variable";
+  --culf-text-2: 'Pretendard Variable';
   --m3-label-medium: Roboto;
   --font-suit: SUIT;
   --font-inter: Inter;
 
-  /* font sizes */
   --culf-text-2-size: 16px;
   --m3-label-medium-size: 12px;
   --culf-button-2-size: 14px;
@@ -24,7 +149,6 @@ body {
   --font-size-mid: 17px;
   --culf-title-1-size: 28px;
 
-  /* Colors */
   --background-default: #fff;
   --color-black: #000;
   --box-default: #fbfbfb;
@@ -63,7 +187,6 @@ body {
   --color-darkslategray: #474747;
   --color-dimgray: #717171;
 
-  /* Gaps */
   --gap-9xs: 4px;
   --gap-5xs: 8px;
   --gap-xl: 20px;
@@ -77,7 +200,6 @@ body {
   --gap-13xl: 32px;
   --gap-70xl: 89px;
 
-  /* Paddings */
   --padding-xl: 20px;
   --padding-3xs: 10px;
   --padding-9xs: 4px;
@@ -96,7 +218,6 @@ body {
   --padding-16xl: 35px;
   --padding-11xl: 30px;
 
-  /* Border radiuses */
   --br-xl: 20px;
   --br-3xs: 10px;
   --br-base: 16px;

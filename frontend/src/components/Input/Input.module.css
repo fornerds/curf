@@ -1,0 +1,60 @@
+.inputWrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input {
+  display: flex;
+  width: 100%;
+  padding: 12px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 0px 12px 12px 12px;
+  border: 1px solid var(--line-less-highlight, #c9c9c9);
+  background: var(--box-default, #fbfbfb);
+  box-sizing: border-box;
+}
+
+.inputElement {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  color: var(--text-default, #222);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inputElement::placeholder {
+  color: var(--text-sub, #767676);
+}
+
+.focused {
+  border-color: var(--line-highlight, #7d7d7d);
+}
+
+.hasValue {
+  justify-content: space-between;
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-sub, #767676);
+}
+
+.disabled {
+  background: var(--box-disable, rgba(234, 234, 234, 0.6));
+  cursor: not-allowed;
+}
+
+.disabled .inputElement {
+  color: var(--text-sub, #767676);
+}
