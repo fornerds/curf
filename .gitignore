@@ -74,7 +74,7 @@ Thumbs.db
 docker-compose.override.yml
 
 # PostgreSQL 데이터
-/backend/db/data/
+/db/data/
 
 # Pulumi
 Pulumi.*.yaml
