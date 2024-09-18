@@ -1,0 +1,9 @@
+.inputWithBtn {
+  display: flex;
+  flex-basis: 100px;
+  gap: 8px;
+}
+
+.button {
+  min-width: 100px;
+}

@@ -3,12 +3,14 @@ import styles from './Input.module.css';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  id?: string;
   className?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'url';
   onChange?: (value: string) => void;
 }
 
 export function Input({
+  id,
   className,
   disabled,
   type = 'text',
@@ -60,6 +62,7 @@ export function Input({
     <div className={styles.inputWrapper}>
       <div className={inputClass}>
         <input
+          id={id}
           ref={inputRef}
           {...props}
           type={type}

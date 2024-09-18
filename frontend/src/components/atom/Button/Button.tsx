@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './Button.module.css';
 
-type ButtonSize = 'size1' | 'size2' | 'size3' | 'size4';
-type ButtonVariant =
+export type ButtonSize = 'size1' | 'size2' | 'size3' | 'size4';
+export type ButtonVariant =
   | 'default'
   | 'plus_icon'
   | 'less-highlight'
