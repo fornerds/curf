@@ -1,0 +1,15 @@
+.accountContent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.accountBottom {
+  margin-top: 60px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
