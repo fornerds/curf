@@ -1,0 +1,50 @@
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
+from datetime import date, datetime
+from uuid import UUID
+
+class UserBase(BaseModel):
+    email: EmailStr
+    nickname: str = Field(..., min_length=2, max_length=50)
+    phone_number: Optional[str] = Field(None, regex=r'^\d{10,11}$')
+    birthdate: date
+    gender: str = Field(..., regex='^(M|F|N)$')
+
+class UserCreate(UserBase):
+    password: str = Field(..., min_length=8)
+    is_corporate: bool = False
+
+class UserUpdate(BaseModel):
+    nickname: Optional[str] = Field(None, min_length=2, max_length=50)
+    phone_number: Optional[str] = Field(None, regex=r'^\d{10,11}$')
+
+class UserInDBBase(UserBase):
+    user_id: UUID
+    created_at: datetime
+    updated_at: datetime
+    last_login_at: Optional[datetime]
+    status: str
+    role: str
+    is_corporate: bool
+
+    class Config:
+        orm_mode = True
+
+class User(UserInDBBase):
+    pass
+
+class UserInDB(UserInDBBase):
+    hashed_password: str
+
+class CorporateUserCreate(BaseModel):
+    company_name: str
+    business_number: Optional[str]
+    contact_person: Optional[str]
+    contact_phone: Optional[str]
+    address: Optional[str]
+
+class CorporateUserInDB(CorporateUserCreate):
+    user_id: UUID
+
+    class Config:
+        orm_mode = True
