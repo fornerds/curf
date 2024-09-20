@@ -10,7 +10,7 @@ class User(Base):
 
     user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    password = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=False)
     nickname = Column(String(50), unique=True, nullable=False)
     phone_number = Column(String(20), unique=True)
     birthdate = Column(Date, nullable=False)
@@ -22,12 +22,17 @@ class User(Base):
     status = Column(Enum('ACTIVE', 'INACTIVE', 'BANNED', 'WITHDRAWN', name='user_status_enum'), nullable=False, default='ACTIVE')
     role = Column(Enum('USER', 'ADMIN', name='user_role_enum'), nullable=False, default='USER')
     withdrawal_reason = Column(Text)
+    marketing_agreed = Column(Boolean, nullable=False, default=False)
     is_corporate = Column(Boolean, nullable=False, default=False)
 
     conversations = relationship("Conversation", back_populates="user")
     tokens = relationship("Token", back_populates="user", uselist=False)
     corporate_info = relationship("CorporateUser", back_populates="user", uselist=False)
     inquiries = relationship("Inquiry", back_populates="user")
+    notifications = relationship("Notification", back_populates="user")
+    notification_settings = relationship("NotificationSetting", back_populates="user")
+    notice_reads = relationship("UserNoticeRead", back_populates="user")
+
 
 class CorporateUser(Base):
     __tablename__ = "corporate_users"

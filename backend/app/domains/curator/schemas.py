@@ -3,7 +3,7 @@ from typing import Optional
 
 class CuratorBase(BaseModel):
     name: str
-    profile_image: Optional[HttpUrl]
+    profile_image: Optional[str] = None
     introduction: Optional[str]
     category: Optional[str]
 

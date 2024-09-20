@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.domains.auth import schemas, services as auth_services
-from app.domains.user import schemas as user_schemas, services as user_services
+from app.domains.auth import schemas as auth_schemas
+from app.domains.auth import services as auth_services
+from app.domains.user import schemas as user_schemas
+from app.domains.user import services as user_services
 from app.core.security import get_password_hash
 from app.db.session import get_db
 from app.core.deps import get_current_user
@@ -11,7 +13,7 @@ from datetime import timedelta
 
 router = APIRouter()
 
-@router.post("/login", response_model=schemas.Token)
+@router.post("/login", response_model=auth_schemas.Token)
 def login(
     db: Session = Depends(get_db),
     form_data: OAuth2PasswordRequestForm = Depends()
@@ -37,7 +39,7 @@ def register(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return user_services.create_user(db=db, user=user)
 
-@router.post("/refresh", response_model=schemas.Token)
+@router.post("/refresh", response_model=auth_schemas.Token)
 def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
     user = auth_services.get_user_from_token(db, refresh_token)
     if not user:
@@ -65,7 +67,7 @@ def update_user_me(
 ):
     return user_services.update_user(db, current_user, user_in)
 
-@router.post("/password-reset", response_model=schemas.Msg)
+@router.post("/password-reset", response_model=auth_schemas.Msg)
 def reset_password(email: str, db: Session = Depends(get_db)):
     user = user_services.get_user_by_email(db, email=email)
     if not user:

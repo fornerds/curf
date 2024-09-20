@@ -10,8 +10,7 @@ from uuid import UUID
 
 router = APIRouter()
 
-
-@router.post("/chat", response_model=schemas.ConversationInDB)
+@router.post("/chat", response_model=schemas.ConversationResponse)
 def create_chat(
         chat: schemas.ConversationCreate,
         db: Session = Depends(get_db),
@@ -19,20 +18,38 @@ def create_chat(
 ):
     user_tokens = token_services.get_user_tokens(db, current_user.user_id)
     if user_tokens.total_tokens - user_tokens.used_tokens <= 0:
-        raise HTTPException(status_code=402, detail="Not enough tokens")
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "error": "not_enough_tokens",
+                "message": "토큰이 부족합니다. 토큰을 충전해주세요."
+            }
+        )
 
-    # Here you would typically call your AI service to get the answer
-    # For this example, we'll just use a placeholder
-    answer = "This is a placeholder answer."
-    tokens_used = 5  # Placeholder value
+    try:
+        # 여기서 일반적으로 AI 서비스를 호출하여 답변을 얻습니다
+        # 이 예제에서는 단순히 플레이스홀더를 사용합니다
+        answer = "이것은 임시 답변입니다."
+        tokens_used = 5  # 임시 값
 
-    conversation = services.create_conversation(db, chat, current_user.user_id, answer, tokens_used)
-    token_services.use_tokens(db, current_user.user_id, tokens_used)
+        conversation = services.create_conversation(db, chat, current_user.user_id, answer, tokens_used)
+        token_services.use_tokens(db, current_user.user_id, tokens_used)
 
-    return conversation
+        return schemas.ConversationResponse(
+            conversation_id=conversation.conversation_id,
+            answer=conversation.answer,
+            tokens_used=conversation.tokens_used
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "internal_server_error",
+                "message": "챗봇 서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+            }
+        )
 
-
-@router.get("/conversations", response_model=List[schemas.ConversationInDB])
+@router.get("/conversations", response_model=schemas.ConversationList)
 def get_conversations(
         page: int = Query(1, ge=1),
         limit: int = Query(10, ge=1, le=100),
@@ -41,14 +58,28 @@ def get_conversations(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    conversations = services.get_user_conversations(db, current_user.user_id, page, limit, sort, summary)
-    return conversations
+    conversations, total_count = services.get_user_conversations(
+        db, current_user.user_id, page, limit, sort, summary
+    )
+    return schemas.ConversationList(conversations=conversations, total_count=total_count)
 
-
-@router.get("/conversations/{conversation_id}", response_model=schemas.ConversationInDB)
+@router.get("/conversations/{conversation_id}", response_model=schemas.ConversationDetail)
 def get_conversation(
         conversation_id: UUID,
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    conversation = services.get_
+    conversation = services.get_conversation(db, conversation_id, current_user.user_id)
+    if not conversation:
+        raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다")
+    return conversation
+
+@router.delete("/conversations/{conversation_id}", status_code=204)
+def delete_conversation(
+        conversation_id: UUID,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    success = services.delete_conversation(db, conversation_id, current_user.user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="대화를 찾을 수 없습니다")

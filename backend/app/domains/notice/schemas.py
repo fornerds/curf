@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
+from uuid import UUID
 
 class NoticeBase(BaseModel):
     title: str
@@ -21,3 +22,11 @@ class Notice(NoticeBase):
 class NoticeList(BaseModel):
     notices: List[Notice]
     total_count: int
+
+class UserNoticeRead(BaseModel):
+    user_id: UUID
+    notice_id: int
+    is_read: bool
+
+    class Config:
+        orm_mode = True
