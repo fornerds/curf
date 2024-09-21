@@ -1,28 +1,26 @@
-.link {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.customWidth {
-  width: 400px;
-  box-sizing: border-box;
-}
-
-.errorMessageWrap {
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.errorMessage {
-  color: var(--pointcolor-red-default);
-}
-
 .main {
   width: 100%;
   max-width: var(--max-width);
-  padding: 10px;
+  padding: 0;
   box-sizing: border-box;
+}
+
+.curatorListSection {
+  padding: 44px 0 0 20px;
+}
+
+.sectionTitle {
+  padding: 0 2px;
+  width: 166px;
+  word-wrap: keep-all;
+}
+
+.chatListSection {
+  padding-top: 44px;
+  padding-bottom: 35px;
+}
+
+.chatListSection .sectionTitle {
+  padding-left: 20px;
+  margin-bottom: 16px;
 }

@@ -1,3 +1,4 @@
+// Button.tsx
 import React from 'react';
 import styles from './Button.module.css';
 
@@ -9,7 +10,8 @@ type ButtonVariant =
   | 'warning'
   | 'disable';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variant?: ButtonVariant;
   className?: string;

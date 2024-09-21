@@ -21,24 +21,28 @@ export function Header({
   return (
     <header className={styles.header}>
       <div className={styles.leftSection}>
-        {showBackButton && (
+        {showBackButton ? (
           <button className={styles.button} onClick={onBackClick}>
             <LeftIcon />
           </button>
+        ) : (
+          <div className={styles.empty}></div>
         )}
       </div>
       <div className={styles.titleSection}>
         {typeof title === 'string' ? (
-          <h1 className={styles.title}>{title}</h1>
+          <h1 className={`${styles.title} font-card-title-1`}>{title}</h1>
         ) : (
           title
         )}
       </div>
       <div className={styles.rightSection}>
-        {showMenuButton && (
+        {showMenuButton ? (
           <button className={styles.button} onClick={onMenuClick}>
             <MenuIcon />
           </button>
+        ) : (
+          <div className={styles.empty}></div>
         )}
       </div>
     </header>

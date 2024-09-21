@@ -1,121 +1,128 @@
-import { useState } from 'react';
-import { Header, Button, Input, Link } from '../../components';
 import styles from './Homepage.module.css';
-import LeftIcon from '@/assets/icons/left.svg?react';
-import WarningIcon from '@/assets/icons/warning.svg?react';
 import logoimage from '../../assets/images/culf.png';
-import { Tab } from '../../modules';
+import curatorimage from '../../assets/images/curator01.png';
+import { Header, Cards, ChatList } from '../../components/organism';
+import { Footer } from '../../components/molecule';
+import { HeroBanner, SlideItem } from '../../modules';
 
-const tabs = [
-  {
-    id: 'account',
-    label: '계정 관리',
-    content: (
-      <div>
-        <h2>계정 관리</h2>
-        <p>여기에 계정 관리 내용이 들어갑니다.</p>
-      </div>
-    ),
-  },
-  {
-    id: 'subscription',
-    label: '구독 관리',
-    content: (
-      <div>
-        <h2>구독 관리</h2>
-        <p>여기에 구독 관리 내용이 들어갑니다.</p>
-      </div>
-    ),
-  },
-  {
-    id: 'payment',
-    label: '결제 내역',
-    content: (
-      <div>
-        <h2>결제 내역</h2>
-        <p>여기에 결제 내역 내용이 들어갑니다.</p>
-      </div>
-    ),
-  },
-];
+// 이미지 URL을 생성하는 헬퍼 함수
+function getImageUrl(name: string): string {
+  return new URL(`../../assets/images/${name}`, import.meta.url).href;
+}
 
 export function Homepage() {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  // 슬라이드 데이터
+  const slides: SlideItem[] = [
+    { imageUrl: getImageUrl('herobanner01.png'), link: '/mypage' },
+    { imageUrl: getImageUrl('herobanner02.png'), link: '/mypage' },
+    { imageUrl: getImageUrl('herobanner03.png'), link: '/mypage' },
+  ];
 
-  const handleEmailChange = (value: string) => {
-    setEmail(value);
-    if (!value.includes('@')) {
-      setEmailError('유효한 이메일 주소를 입력해주세요.');
-    } else {
-      setEmailError('');
-    }
-  };
+  const cardsData = [
+    {
+      frontColor: '#4ae9ff',
+      backColor: '#088394',
+      title: '해외여행 큐레이터, 몰리',
+      hashtags: ['유럽', '여행지추천'],
+      characterImage: getImageUrl('character01.png'),
+      link: '/chat/2',
+    },
+    {
+      frontColor: '#18ff75',
+      backColor: '#1cab55',
+      title: '국내여행 큐레이터, 코리',
+      hashtags: ['국내', '여행지추천'],
+      characterImage: getImageUrl('character01.png'),
+      link: '/chat/3',
+    },
+    {
+      frontColor: '#f1ff55',
+      backColor: '#bbc826',
+      title: '문화 큐레이터, 컬리',
+      hashtags: ['문화', '여행지추천'],
+      characterImage: getImageUrl('character01.png'),
+      link: '/chat/4',
+    },
+    {
+      frontColor: '#ff4a4a',
+      backColor: '#bc2626',
+      title: '미술관 큐레이터, 아티',
+      hashtags: ['박물관', '여행지추천'],
+      characterImage: getImageUrl('character01.png'),
+      link: '/chat/1',
+    },
+  ];
+
+  const chatsData = [
+    {
+      id: '1',
+      curatorImage: { curatorimage },
+      curatorName: '국내여행 큐레이터 코리',
+      lastMessage:
+        '서울에서 꼭 가봐야할 맛집은 취향에 따라 달라질 수 있겠지만 저는 이 맛집을 추천합니다!',
+      lastMessageDate: '오전 12:47',
+    },
+    {
+      id: '2',
+      curatorImage: { curatorimage },
+      curatorName: '문화 큐레이터 컬리',
+      lastMessage: '이렇게 여행계획을 세우는 것은 어떨까요?',
+      lastMessageDate: '어제',
+    },
+    {
+      id: '3',
+      curatorImage: { curatorimage },
+      curatorName: '해외여행 큐레이터 몰리',
+      lastMessage:
+        '문의하신 콘서트는 이미 티켓이 마감되었어요 취향에 따라 달라질 수 있겠지만 저는 이 맛집을 추천합니다!',
+      lastMessageDate: '8월 2일',
+    },
+    {
+      id: '4',
+      curatorImage: { curatorimage },
+      curatorName: '미술관 큐레이터 아티',
+      lastMessage: '모나 미술관에서 진행중인 상설 전시는 두 가지가 있습니다',
+      lastMessageDate: '8월 2일',
+    },
+    {
+      id: '5',
+      curatorImage: { curatorimage },
+      curatorName: '국내여행 큐레이터 코리',
+      lastMessage:
+        '서울에서 꼭 가봐야할 맛집은 취향에 따라 달라질 수 있겠지만 저는 이 맛집을 추천합니다!',
+      lastMessageDate: '8월 1일',
+    },
+  ];
 
   return (
     <>
-      <Header
-        title="제목"
-        showBackButton={true}
-        onBackClick={() => console.log('뒤로 가기')}
-      />
-
       <Header
         title={<img src={logoimage} alt="로고" width="54" height="19" />}
         showMenuButton={true}
         onMenuClick={() => console.log('메뉴 열기')}
       />
-
-      <Header
-        title="메인 페이지"
-        showBackButton={true}
-        showMenuButton={true}
-        onBackClick={() => console.log('뒤로 가기')}
-        onMenuClick={() => console.log('메뉴 열기')}
-      />
-      <Tab tabs={tabs} defaultActiveTab="subscription" />
       <main className={styles.main}>
-        <Link to="/mypage" className={styles.link}>
-          <LeftIcon />
-          마이페이지 이동
-        </Link>
-        <Button size="size1" variant="default">
-          기본 버튼
-        </Button>
-        <Button size="size2" variant="plus_icon">
-          <LeftIcon /> 추가하기
-        </Button>
-        <Button
-          size="size3"
-          variant="less-highlight"
-          className={styles.customWidth}
-        >
-          덜 강조된 버튼
-        </Button>
-        <Button size="size4" variant="warning">
-          경고
-        </Button>
-        <Button size="size2" variant="disable">
-          비활성화
-        </Button>
-        <Input placeholder="기본 입력" />
-        <Input
-          type="email"
-          placeholder="이메일 주소"
-          value={email}
-          onChange={handleEmailChange}
-        />
-        {emailError && (
-          <div className={styles.errorMessageWrap}>
-            <WarningIcon />
-            <p className={`${styles.errorMessage} font-guidetext`}>
-              {emailError}
-            </p>
-          </div>
-        )}
-        <Input placeholder="비활성화" disabled />
-        <Input placeholder="커스텀 너비" className={styles.customWidth} />
+        <HeroBanner slides={slides} />
+        <section className={styles.curatorListSection}>
+          <h2 className={`${styles.sectionTitle} font-title-2`}>
+            어떤 큐레이터와 이야기 해볼까요?
+          </h2>
+          <Cards cards={cardsData} />
+        </section>
+        <section className={styles.chatListSection}>
+          <h2 className={`${styles.sectionTitle} font-title-2`}>
+            지난 대화를
+            <br />
+            이어가 볼까요?
+          </h2>
+          <ChatList chats={chatsData} />
+        </section>
       </main>
+      <Footer
+        companyName="아트키"
+        address="서울특별시 서대문구 성산로 7길 89-8"
+        registrationNumber="000-00-0000"
+      />
     </>
   );
 }
