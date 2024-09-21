@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputBox } from '../InputBox';
+import { InputBox } from '@/components/molecule/InputBox';
 import styles from './PhoneVerificationForm.module.css';
 
 export function PhoneVerificationForm() {

@@ -1,7 +1,7 @@
-import { Header } from '@/components';
+import { Header } from '@/components/organism';
 import styles from './Mypage.module.css';
 import { Tab } from '@/modules';
-import { Account } from './Account';
+import { Account } from '@/components/organism';
 
 export function Mypage() {
   const tabs = [

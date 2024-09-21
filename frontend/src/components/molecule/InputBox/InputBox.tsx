@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './InputBox.module.css';
-import { Label } from '../Label';
-import { Input } from '../Input/Input';
-import { ValidationMessage } from '../ValidationMessage';
-import { Button } from '../Button';
-import { ButtonSize, ButtonVariant } from '../Button/Button';
-import { ValidationMessageType } from '../ValidationMessage/ValidationMessage';
+import { Label } from '@/components/atom';
+import { Input } from '@/components/atom';
+import { ValidationMessage } from '@/components/atom';
+import { Button } from '@/components/atom';
+import { ButtonSize, ButtonVariant } from '@/components/atom/Button/Button';
+import { ValidationMessageType } from '@/components/atom/ValidationMessage/ValidationMessage';
 
 interface InputBoxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {

@@ -1,8 +1,8 @@
-import { Button, Input } from '@/components';
+import { Button } from '@/components/atom';
 import { useState } from 'react';
 import styles from './Account.module.css';
-import { InputBox } from '@/components/InputBox/InputBox';
-import { PhoneVerificationForm } from '@/components/PhoneVerificationForm';
+import { InputBox } from '@/components/molecule/InputBox';
+import { PhoneVerificationForm } from '@/components/molecule/PhoneVerificationForm';
 
 export function Account() {
   const [email, setEmail] = useState('');
