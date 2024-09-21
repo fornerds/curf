@@ -1,0 +1,33 @@
+.footer {
+  width: 100%;
+  max-width: var(--max-width);
+  box-sizing: border-box;
+  background-color: #ebebeb;
+  padding: 16px 20px 34px;
+  font-size: 12px;
+  color: var(--text-sub, #767676);
+}
+
+.content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.info {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.copyright {
+  margin: 8px 0 0;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    font-size: 10px;
+  }
+
+  .content {
+    padding: 0 10px;
+  }
+}

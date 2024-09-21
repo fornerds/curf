@@ -1,0 +1,23 @@
+.cardsOuterContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardsContainer {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 16px;
+  padding-bottom: 4px;
+  gap: 16px;
+}
+
+.cardsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.cardsContainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
