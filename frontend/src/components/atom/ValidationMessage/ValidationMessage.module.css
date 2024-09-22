@@ -1,0 +1,16 @@
+.validationMessageWrap {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  /* TODO: error message 영역 확인 필요 */
+  /* position: absolute; */
+  gap: 6px;
+}
+
+.errorMessage {
+  color: var(--pointcolor-red-default);
+}
+
+.successMessage {
+  color: var(--pointcolor-green-dark);
+}

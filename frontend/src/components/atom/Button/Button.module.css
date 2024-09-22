@@ -78,15 +78,15 @@
 
 /* Specific size overrides */
 .size1 {
-  width: 335px;
+  width: 100%;
 }
 
 .size2 {
-  width: 335px;
+  width: 100%;
 }
 
 .size3 {
-  width: 260px;
+  width: calc(50% - 8px);
 }
 
 .size4 {
