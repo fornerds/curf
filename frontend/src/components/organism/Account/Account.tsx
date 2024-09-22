@@ -14,6 +14,12 @@ export function Account() {
   const [password, setPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
 
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const [newPassword, setNewPassword] = useState('');
+
+  const [newPasswordCheck, setNewPasswordCheck] = useState('');
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if (!value.includes('@')) {
@@ -25,12 +31,22 @@ export function Account() {
 
   const handleNicknameChange = (value: string) => {
     setNickname(value);
-    console.log('닉네임 정책 확인');
   };
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    console.log('휴대폰 번호 정책 확인');
+  };
+
+  const handlePasswordCheckClick = () => {
+    setIsPasswordValid(!isPasswordValid);
+  };
+
+  const handleNewPasswordChange = (value: string) => {
+    setNewPassword(value);
+  };
+
+  const handleNewPasswordCheckChange = (value: string) => {
+    setNewPasswordCheck(value);
   };
 
   return (
@@ -56,16 +72,37 @@ export function Account() {
             onChange={handleNicknameChange}
           />
           <PhoneVerificationForm />
-          <InputBox
-            id="passwordChange"
-            label="비밀번호 변경"
-            placeholder="기존 비밀번호 입력"
-            value={password}
-            buttonSize="size4"
-            buttonVariant="default"
-            buttonText="확인"
-            onChange={handlePasswordChange}
-          />
+          <section className={styles.passwordSection}>
+            <InputBox
+              id="changePassword"
+              label="비밀번호 변경"
+              placeholder="기존 비밀번호 입력"
+              value={password}
+              buttonSize="size4"
+              buttonVariant="default"
+              buttonText="확인"
+              onChange={handlePasswordChange}
+              onClick={handlePasswordCheckClick}
+            />
+            {isPasswordValid && (
+              <>
+                <InputBox
+                  id="newPassword"
+                  label="신규 비밀번호"
+                  placeholder="비밀번호 입력"
+                  value={newPassword}
+                  onChange={handleNewPasswordChange}
+                />
+                <InputBox
+                  id="newPasswordCheck"
+                  label="비밀번호 변경"
+                  placeholder="기존 비밀번호 입력"
+                  value={newPasswordCheck}
+                  onChange={handleNewPasswordCheckChange}
+                />
+              </>
+            )}
+          </section>
         </div>
         <div className={styles.accountBottom}>
           <Button>변경사항 저장</Button>

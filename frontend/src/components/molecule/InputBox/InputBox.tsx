@@ -21,6 +21,7 @@ interface InputBoxProps
   buttonClassName?: string;
   buttonText?: string;
   onChange?: (value: string) => void;
+  onClick?: () => void;
 }
 
 export function InputBox({
@@ -37,6 +38,7 @@ export function InputBox({
   buttonClassName,
   buttonText,
   onChange,
+  onClick,
   ...props
 }: InputBoxProps) {
   return (
@@ -56,6 +58,7 @@ export function InputBox({
             size={buttonSize}
             variant={buttonVariant}
             className={`${styles.button} ${buttonClassName}`}
+            onClick={onClick}
           >
             {buttonText}
           </Button>

@@ -4,6 +4,12 @@
   gap: 40px;
 }
 
+.passwordSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .accountBottom {
   margin-top: 60px;
 }

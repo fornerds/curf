@@ -14,6 +14,7 @@ export interface ButtonProps
   size?: ButtonSize;
   variant?: ButtonVariant;
   className?: string;
+  onClick?: () => void;
   children: React.ReactNode;
 }
 
@@ -22,13 +23,14 @@ export function Button({
   variant = 'default',
   className,
   children,
+  onClick,
   ...props
 }: ButtonProps) {
   const buttonClass =
     `${styles.button} ${styles[size]} ${styles[variant]} ${className || ''}`.trim();
 
   return (
-    <button className={buttonClass} {...props}>
+    <button className={buttonClass} onClick={onClick} {...props}>
       {children}
     </button>
   );
