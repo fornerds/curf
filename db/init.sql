@@ -12,7 +12,7 @@ CREATE TYPE feedback_rating AS ENUM ('GOOD', 'BAD');
 
 -- Users 테이블
 CREATE TABLE Users (
-    user_id CHAR(36) PRIMARY KEY,
+    user_id UUID PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     nickname VARCHAR(50) UNIQUE NOT NULL,
@@ -26,7 +26,8 @@ CREATE TABLE Users (
     status status_enum NOT NULL DEFAULT 'ACTIVE',
     role role_enum NOT NULL DEFAULT 'USER',
     delete_reason VARCHAR(255),
-    is_corporate BOOLEAN NOT NULL DEFAULT FALSE
+    is_corporate BOOLEAN NOT NULL DEFAULT FALSE,
+    marketing_agreed BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Curators 테이블
@@ -42,7 +43,7 @@ CREATE TABLE Curators (
 
 -- User Interests 테이블
 CREATE TABLE User_Interests (
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     curator_id INTEGER REFERENCES Curators(curator_id),
     PRIMARY KEY (user_id, curator_id)
 );
@@ -50,7 +51,7 @@ CREATE TABLE User_Interests (
 -- Conversations 테이블
 CREATE TABLE Conversations (
     conversation_id CHAR(36) PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     question TEXT NOT NULL,
     question_summary TEXT,
     question_image VARCHAR(255),
@@ -63,7 +64,7 @@ CREATE TABLE Conversations (
 
 -- Tokens 테이블
 CREATE TABLE Tokens (
-    user_id CHAR(36) PRIMARY KEY REFERENCES Users(user_id),
+    user_id UUID PRIMARY KEY REFERENCES Users(user_id),
     total_tokens INTEGER NOT NULL DEFAULT 0,
     used_tokens INTEGER NOT NULL DEFAULT 0,
     last_charged_at TIMESTAMP,
@@ -73,7 +74,7 @@ CREATE TABLE Tokens (
 -- Token Usage History 테이블
 CREATE TABLE Token_Usage_History (
     history_id BIGSERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     conversation_id CHAR(36) REFERENCES Conversations(conversation_id),
     tokens_used INTEGER NOT NULL DEFAULT 0,
     used_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -96,7 +97,7 @@ CREATE TABLE Subscription_Plans (
 -- User Subscriptions 테이블
 CREATE TABLE User_Subscriptions (
     subscription_id BIGSERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     plan_id INTEGER REFERENCES Subscription_Plans(plan_id),
     start_date DATE NOT NULL,
     next_billing_date DATE NOT NULL,
@@ -130,7 +131,7 @@ CREATE TABLE Coupons (
 -- Payments 테이블
 CREATE TABLE Payments (
     payment_id BIGSERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     subscription_id BIGINT REFERENCES User_Subscriptions(subscription_id),
     token_plan_id INTEGER REFERENCES Token_Plans(token_plan_id),
     payment_number VARCHAR(20) UNIQUE NOT NULL,
@@ -147,19 +148,19 @@ CREATE TABLE Payments (
 CREATE TABLE Refunds (
     refund_id SERIAL PRIMARY KEY,
     payment_id BIGINT REFERENCES Payments(payment_id),
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     reason TEXT,
     status refund_status NOT NULL DEFAULT 'PENDING',
     processed_at TIMESTAMP,
-    processed_by CHAR(36) REFERENCES Users(user_id),
+    processed_by UUID REFERENCES Users(user_id),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- User Coupons 테이블
 CREATE TABLE User_Coupons (
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     coupon_id INTEGER REFERENCES Coupons(coupon_id),
     used_at TIMESTAMP,
     PRIMARY KEY (user_id, coupon_id)
@@ -181,7 +182,7 @@ CREATE TABLE Notices (
 
 -- User Notice Reads 테이블
 CREATE TABLE User_Notice_Reads (
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     notice_id INTEGER REFERENCES Notices(notice_id),
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, notice_id)
@@ -190,7 +191,7 @@ CREATE TABLE User_Notice_Reads (
 -- Notifications 테이블
 CREATE TABLE Notifications (
     notification_id BIGSERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     type VARCHAR(50) NOT NULL,
     message TEXT NOT NULL,
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
@@ -200,7 +201,7 @@ CREATE TABLE Notifications (
 -- UserNotificationSettings 테이블
 CREATE TABLE User_Notification_Settings (
     setting_id SERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     notification_type VARCHAR(50) NOT NULL,
     is_enabled BOOLEAN NOT NULL DEFAULT TRUE
 );
@@ -208,7 +209,7 @@ CREATE TABLE User_Notification_Settings (
 -- Inquiries 테이블
 CREATE TABLE Inquiries (
     inquiry_id BIGSERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     type VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -223,7 +224,7 @@ CREATE TABLE Inquiries (
 -- Admin Logs 테이블
 CREATE TABLE Admin_Logs (
     log_id BIGSERIAL PRIMARY KEY,
-    admin_id CHAR(36) REFERENCES Users(user_id),
+    admin_id UUID REFERENCES Users(user_id),
     action VARCHAR(50) NOT NULL,
     target VARCHAR(255),
     details TEXT,
@@ -239,7 +240,7 @@ CREATE TABLE Forbidden_Words (
 -- UserBans 테이블
 CREATE TABLE User_Bans (
     ban_id SERIAL PRIMARY KEY,
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     reason TEXT NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP
@@ -247,7 +248,7 @@ CREATE TABLE User_Bans (
 
 -- CorporateUsers 테이블
 CREATE TABLE Corporate_Users (
-    user_id CHAR(36) PRIMARY KEY REFERENCES Users(user_id),
+    user_id UUID PRIMARY KEY REFERENCES Users(user_id),
     company_name VARCHAR(255) NOT NULL,
     business_number VARCHAR(20),
     contact_person VARCHAR(50),
@@ -257,7 +258,7 @@ CREATE TABLE Corporate_Users (
 
 -- AdminUsers 테이블
 CREATE TABLE Admin_Users (
-    admin_id CHAR(36) PRIMARY KEY REFERENCES Users(user_id),
+    admin_id UUID PRIMARY KEY REFERENCES Users(user_id),
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role admin_role NOT NULL DEFAULT 'ADMIN',
@@ -296,7 +297,7 @@ CREATE TABLE Terms_And_Conditions (
 CREATE TABLE Conversation_Feedbacks (
     feedback_id BIGSERIAL PRIMARY KEY,
     conversation_id CHAR(36) REFERENCES Conversations(conversation_id),
-    user_id CHAR(36) REFERENCES Users(user_id),
+    user_id UUID REFERENCES Users(user_id),
     rating feedback_rating,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

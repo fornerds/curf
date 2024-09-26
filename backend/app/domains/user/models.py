@@ -10,7 +10,7 @@ class User(Base):
 
     user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=False, name="password")
     nickname = Column(String(50), unique=True, nullable=False)
     phone_number = Column(String(20), unique=True)
     birthdate = Column(Date, nullable=False)
@@ -21,7 +21,7 @@ class User(Base):
     last_login_at = Column(DateTime(timezone=True))
     status = Column(Enum('ACTIVE', 'INACTIVE', 'BANNED', 'WITHDRAWN', name='user_status_enum'), nullable=False, default='ACTIVE')
     role = Column(Enum('USER', 'ADMIN', name='user_role_enum'), nullable=False, default='USER')
-    withdrawal_reason = Column(Text)
+    withdrawal_reason = Column(Text,name='delete_reason')
     marketing_agreed = Column(Boolean, nullable=False, default=False)
     is_corporate = Column(Boolean, nullable=False, default=False)
 
