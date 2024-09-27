@@ -55,110 +55,110 @@ function App() {
     }
   }, [action, pathname]);
 
-  useEffect(() => {
-    let title = '';
-    let metaDescription = '';
+  // useEffect(() => {
+  //   let title = '';
+  //   let metaDescription = '';
 
-    switch (pathname) {
-      case '/':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/notification-detail':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/payment-cancel':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/subscription-management':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/payment':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/notification':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/account-management':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/inquiries':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/delete-account':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/add-payment':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/terms-agreement':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/find-email':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/find-password':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/payment-history':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/signup-done':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/signup':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/login':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/chat':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/announcement':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/payment-item':
-        title = '';
-        metaDescription = '';
-        break;
-      case '/':
-        title = '';
-        metaDescription = '';
-        break;
-    }
+  //   switch (pathname) {
+  //     case '/':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/notification-detail':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/payment-cancel':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/subscription-management':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/payment':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/notification':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/account-management':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/inquiries':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/delete-account':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/add-payment':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/terms-agreement':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/find-email':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/find-password':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/payment-history':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/signup-done':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/signup':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/login':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/chat':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/announcement':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/payment-item':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //     case '/':
+  //       title = '';
+  //       metaDescription = '';
+  //       break;
+  //   }
 
-    if (title) {
-      document.title = title;
-    }
+  //   if (title) {
+  //     document.title = title;
+  //   }
 
-    if (metaDescription) {
-      const metaDescriptionTag: HTMLMetaElement | null = document.querySelector(
-        'head > meta[name="description"]',
-      );
-      if (metaDescriptionTag) {
-        metaDescriptionTag.content = metaDescription;
-      }
-    }
-  }, [pathname]);
+  //   if (metaDescription) {
+  //     const metaDescriptionTag: HTMLMetaElement | null = document.querySelector(
+  //       'head > meta[name="description"]',
+  //     );
+  //     if (metaDescriptionTag) {
+  //       metaDescriptionTag.content = metaDescription;
+  //     }
+  //   }
+  // }, [pathname]);
 
   return (
     <Layout>
