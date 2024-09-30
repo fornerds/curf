@@ -1,6 +1,10 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+class EmailPasswordLogin(BaseModel):
+    email: str
+    password: str
+
 class Token(BaseModel):
     access_token: str
     refresh_token: str
