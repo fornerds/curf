@@ -18,6 +18,20 @@ def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
             "message": "입력 정보가 올바르지 않습니다.",
             "details": [{"field": "email", "message": "이미 등록된 이메일 주소입니다."}]
         })
+    db_user = user_services.get_user_by_nickname(db, nickname=user.nickname)
+    if db_user:
+        raise HTTPException(status_code=400, detail={
+            "error": "validation_error",
+            "message": "입력 정보가 올바르지 않습니다.",
+            "details": [{"field": "nickname", "message": "이미 등록된 닉네임입니다."}]
+        })
+    db_user = user_services.get_user_by_phone_number(db, phone_number=user.phone_number)
+    if db_user:
+        raise HTTPException(status_code=400, detail={
+            "error": "validation_error",
+            "message": "입력 정보가 올바르지 않습니다.",
+            "details": [{"field": "phone_number", "message": "이미 등록된 번호입니다."}]
+        })
     if user.password != user.password_confirmation:
         raise HTTPException(status_code=400, detail={
             "error": "validation_error",

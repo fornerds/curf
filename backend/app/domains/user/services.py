@@ -12,6 +12,12 @@ def get_user(db: Session, user_id: UUID) -> Optional[models.User]:
 def get_user_by_email(db: Session, email: str) -> Optional[models.User]:
     return db.query(models.User).filter(models.User.email == email).first()
 
+def get_user_by_nickname(db: Session, nickname: str) -> Optional[models.User]:
+    return db.query(models.User).filter(models.User.nickname == nickname).first()
+
+def get_user_by_phone_number(db: Session, phone_number: str) -> Optional[models.User]:
+    return db.query(models.User).filter(models.User.phone_number == phone_number).first()
+
 def get_users(db: Session, skip: int = 0, limit: int = 100) -> List[Type[User]]:
     return db.query(models.User).offset(skip).limit(limit).all()
 
