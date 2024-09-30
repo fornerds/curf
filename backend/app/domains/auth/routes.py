@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.domains.auth import schemas as auth_schemas
 from app.domains.auth import services as auth_services
@@ -13,12 +14,12 @@ from datetime import timedelta
 
 router = APIRouter()
 
-@router.post("/login", response_model=auth_schemas.Token)
+@router.post("/login")
 def login(
-    db: Session = Depends(get_db),
-    form_data: OAuth2PasswordRequestForm = Depends()
+    login_data: auth_schemas.EmailPasswordLogin,
+    db: Session = Depends(get_db)
 ):
-    user = auth_services.authenticate_user(db, form_data.username, form_data.password)
+    user = auth_services.authenticate_user(db, login_data.email, login_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -26,12 +27,8 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token, refresh_token = auth_services.create_tokens(str(user.user_id))
-    return {
-        "access_token": access_token,
-        "refresh_token": refresh_token,
-        "expires_in": settings.ACCESS_TOKEN_EXPIRE_MINUTES,
-        "token_type": "bearer"
-    }
+
+    return auth_services.get_json_response(access_token,refresh_token)
 
 @router.post("/register", response_model=user_schemas.User)
 def register(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
@@ -40,8 +37,12 @@ def register(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return user_services.create_user(db=db, user=user)
 
-@router.post("/refresh", response_model=auth_schemas.Token)
-def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
+@router.post("/refresh")
+def refresh_token(request:Request, db: Session = Depends(get_db)):
+    refresh_token = request.cookies.get("refresh_token")
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="Refresh token missing")
+
     user = auth_services.get_user_from_token(db, refresh_token)
     if not user:
         raise HTTPException(
@@ -50,11 +51,15 @@ def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token, new_refresh_token = auth_services.create_tokens(str(user.user_id))
-    return {
-        "access_token": access_token,
-        "refresh_token": new_refresh_token,
-        "token_type": "bearer"
-    }
+
+    return auth_services.get_json_response(access_token,new_refresh_token)
+
+@router.post("/logout")
+async def logout():
+    # 쿠키에서 Refresh Token 삭제
+    response = JSONResponse(content={"detail": "Successfully logged out"})
+    response.delete_cookie("refresh_token")
+    return response
 
 @router.get("/me", response_model=user_schemas.User)
 def read_users_me(current_user: user_schemas.User = Depends(get_current_user)):

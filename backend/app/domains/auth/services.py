@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from fastapi.responses import JSONResponse
 from typing import Optional, Tuple
 from sqlalchemy.orm import Session
 from app.domains.user.models import User
@@ -54,3 +55,18 @@ def reset_password(db: Session, email: str, new_password: str) -> bool:
     user.hashed_password = hashed_password
     db.commit()
     return True
+
+def get_json_response(access_token :str,refresh_token :str,) -> JSONResponse:
+    response = JSONResponse(content={"access_token": access_token, "token_type": "bearer","expires_in": settings.ACCESS_TOKEN_EXPIRE_MINUTES})
+    refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+        # 쿠키에 Refresh Token을 설정 (httpOnly, secure 옵션 추가 가능)
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,  # 자바스크립트에서 접근 불가
+        max_age=refresh_token_expires.total_seconds(),  # 쿠키 만료 시간 설정
+        expires=refresh_token_expires.total_seconds(),
+        secure=False,  # HTTPS에서만 전송 (개발 중에는 False로 설정 가능)
+        samesite="lax",  # 쿠키의 SameSite 속성
+    )
+    return response
