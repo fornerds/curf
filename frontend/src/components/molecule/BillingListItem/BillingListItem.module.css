@@ -1,0 +1,13 @@
+.billingListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billingListItem + .billingListItem {
+  margin-top: 6px;
+}
+
+.textSub {
+  color: var(--text-sub, #767676);
+}
