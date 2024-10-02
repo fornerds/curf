@@ -27,3 +27,27 @@
   cursor: pointer;
   color: var(--text-sub, #767676);
 }
+
+.userInfo {
+  margin-top: 12px;
+}
+
+.userInfoItem {
+  display: flex;
+  padding: 2px 0px;
+  align-items: flex-start;
+  align-self: stretch;
+  flex: 60px 0;
+}
+
+.userInfoItem div:nth-child(1) {
+  width: 60px;
+}
+
+.userInfoItem + .userInfoItem {
+  margin-top: 8px;
+}
+
+.billingList {
+  margin-top: 16px;
+}
