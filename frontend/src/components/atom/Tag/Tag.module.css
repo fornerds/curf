@@ -1,0 +1,40 @@
+.tag {
+  padding: 3px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 12px;
+  box-sizing: border-box;
+  width: fit-content;
+}
+
+.default {
+  padding: 2px 6px;
+  background-color: var(--background-default, #ffffff);
+  border: 1px solid var(--line-stay-the-same, #222);
+}
+
+.keycolor5 {
+  background-color: var(--keycolor-5, #b6b4ff);
+  color: var(--keycolor-2, #6314e4);
+}
+
+.warning {
+  background-color: #ffdfd8;
+  color: var(--pointcolor-red-default, #ff4a4a);
+}
+
+.token_number {
+  padding: 4px 12px;
+  background-color: #e6e6e6;
+  color: var(--text-sub, #767676);
+}
+
+.token_number > span {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.keycolor2 {
+  background-color: var(--keycolor-2, #6314e4);
+  color: #ffffff;
+}

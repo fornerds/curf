@@ -2,6 +2,7 @@ import { Header } from '@/components/organism';
 import styles from './Mypage.module.css';
 import { Tab } from '@/modules';
 import { Account } from '@/components/organism';
+import { Subscription } from '@/components/organism/Subscription';
 
 export function Mypage() {
   const tabs = [
@@ -13,12 +14,7 @@ export function Mypage() {
     {
       id: 'subscription',
       label: '구독 관리',
-      content: (
-        <div>
-          <h2>구독 관리</h2>
-          <p>여기에 구독 관리 내용이 들어갑니다.</p>
-        </div>
-      ),
+      content: <Subscription />,
     },
     {
       id: 'payment',
