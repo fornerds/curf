@@ -3,3 +3,27 @@
   flex-direction: column;
   gap: 60px;
 }
+
+.sectionTitle {
+  display: flex;
+  padding: 0px 2px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.textButton {
+  margin: 0;
+  padding: 10px 0;
+  border-width: 0;
+  border-radius: 0;
+  background-color: transparent;
+  font-family: inherit;
+  font-family: 'Pretendard Variable';
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration-line: underline;
+  user-select: none;
+  appearance: none;
+  cursor: pointer;
+  color: var(--text-sub, #767676);
+}
