@@ -58,10 +58,12 @@ def delete_user(db: Session, user_id: UUID, delete_info: schemas.UserDelete) -> 
     db.add(db_user)
     db.commit()
 
-def change_user_password(db: Session, user_id: UUID, new_password: str) -> None:
+def change_user_password(db: Session, user_id: UUID, new_password: str, new_password_confirm: str) -> None:
     db_user = get_user(db, user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
+    if new_password != new_password_confirm:
+        raise HTTPException(status_code=400,detail="New password and confirmation do not match.")
     db_user.hashed_password = get_password_hash(new_password)
     db.add(db_user)
     db.commit()
