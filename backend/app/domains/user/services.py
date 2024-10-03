@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
+from app.domains.subscription.models import SubscriptionPlan, UserSubscription
 from app.core.security import get_password_hash, verify_password
 from typing import List, Optional, Type
 from uuid import UUID
@@ -68,11 +69,11 @@ def change_user_password(db: Session, user_id: UUID, new_password: str, new_pass
     db.add(db_user)
     db.commit()
 
-def get_user_subscription(db: Session, user_id: UUID) -> Optional[dict]:
-    # TODO
-    # Implement this function to get user's subscription info
-    # You might need to create a new model for subscriptions
-    pass
+def get_user_subscription(db: Session, user_id: UUID) -> Optional[UserSubscription]:
+    return  (db.query(UserSubscription)
+            .filter(UserSubscription.user_id == user_id)
+            .order_by(UserSubscription.start_date.desc())
+            .first())
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[models.User]:
     user = get_user_by_email(db, email)
