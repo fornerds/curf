@@ -69,6 +69,7 @@ def change_user_password(db: Session, user_id: UUID, new_password: str, new_pass
     db.commit()
 
 def get_user_subscription(db: Session, user_id: UUID) -> Optional[dict]:
+    # TODO
     # Implement this function to get user's subscription info
     # You might need to create a new model for subscriptions
     pass

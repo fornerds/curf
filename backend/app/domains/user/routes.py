@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.core.deps import get_current_user
@@ -63,6 +63,9 @@ def update_user_me(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """
+    회원 정보 수정 API, 전화번호와 닉네임을 수정한다.
+    """
     updated_user = user_services.update_user(db, current_user.user_id, user_update)
     return {"message": "회원정보가 수정되었습니다."}
 
