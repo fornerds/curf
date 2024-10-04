@@ -1,7 +1,10 @@
 from pydantic import BaseSettings
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+# 환경 변수에 따라 적절한 .env 파일 로드
+env_file = f".env.{os.environ.get('ENV', 'local')}"
+load_dotenv(env_file)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "cul.f"
@@ -11,8 +14,8 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 8  # 8 days
     ALGORITHM: str = "HS256"
 
-    DB_HOST: str
-    DB_PORT: int
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = os.getenv("DB_PORT")
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
