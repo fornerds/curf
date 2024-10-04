@@ -1,9 +1,14 @@
+import os
+import sys
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
+
+# 프로젝트 루트 디렉토리를 Python 경로에 추가
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from app.main import app
-from app.db.base import Base
+from app.db.base_class import Base
 from app.db.session import get_db
 from app.core.config import settings
 from app.domains.user.models import User
@@ -44,7 +49,7 @@ def client(db):
 def test_user(db):
     user = User(
         email="test@example.com",
-        hashed_password=get_password_hash("testpassword"),
+        password=get_password_hash("testpassword"),
         nickname="testuser",
         phone_number="1234567890",
         birthdate="1990-01-01",
@@ -60,7 +65,7 @@ def test_user(db):
 def test_superuser(db):
     user = User(
         email="admin@example.com",
-        hashed_password=get_password_hash("adminpassword"),
+        password=get_password_hash("adminpassword"),
         nickname="admin",
         phone_number="9876543210",
         birthdate="1985-01-01",

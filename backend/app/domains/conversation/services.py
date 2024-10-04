@@ -50,8 +50,7 @@ def get_user_conversations(
     conversations = query.offset(offset).limit(limit).all()
 
     if summary:
-        # 요약이 요청된 경우, 일반적으로 여기서 요약을 생성합니다
-        # 이 예제에서는 질문과 답변의 처음 50자만 사용합니다
+        # 요약이 요청된 경우, 질문과 답변의 처음 50자만 사용합니다
         for conv in conversations:
             conv.question_summary = conv.question[:50] + "..." if len(conv.question) > 50 else conv.question
             conv.answer_summary = conv.answer[:50] + "..." if len(conv.answer) > 50 else conv.answer

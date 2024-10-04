@@ -11,7 +11,7 @@ from app.domains.user import services as user_services
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     user = user_services.get_user_by_email(db, email)
-    if not user or not verify_password(password, user.hashed_password):
+    if not user or not verify_password(password, user.password):
         return None
     return user
 
@@ -51,8 +51,8 @@ def reset_password(db: Session, email: str, new_password: str) -> bool:
     user = user_services.get_user_by_email(db, email)
     if not user:
         return False
-    hashed_password = get_password_hash(new_password)
-    user.hashed_password = hashed_password
+    password = get_password_hash(new_password)
+    user.password = password
     db.commit()
     return True
 

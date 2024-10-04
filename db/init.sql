@@ -1,3 +1,6 @@
+-- 확장 기능 활성화
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Custom ENUM types
 CREATE TYPE gender_enum AS ENUM ('M', 'F', 'N');
 CREATE TYPE status_enum AS ENUM ('ACTIVE', 'INACTIVE', 'BANNED', 'DELETE');
@@ -12,7 +15,7 @@ CREATE TYPE feedback_rating AS ENUM ('GOOD', 'BAD');
 
 -- Users 테이블
 CREATE TABLE Users (
-    user_id UUID PRIMARY KEY,
+    user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     nickname VARCHAR(50) UNIQUE NOT NULL,
@@ -50,7 +53,7 @@ CREATE TABLE User_Interests (
 
 -- Conversations 테이블
 CREATE TABLE Conversations (
-    conversation_id CHAR(36) PRIMARY KEY,
+    conversation_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES Users(user_id),
     question TEXT NOT NULL,
     question_summary TEXT,
@@ -64,7 +67,8 @@ CREATE TABLE Conversations (
 
 -- Tokens 테이블
 CREATE TABLE Tokens (
-    user_id UUID PRIMARY KEY REFERENCES Users(user_id),
+    token_id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES Users(user_id),
     total_tokens INTEGER NOT NULL DEFAULT 0,
     used_tokens INTEGER NOT NULL DEFAULT 0,
     last_charged_at TIMESTAMP,
@@ -73,9 +77,9 @@ CREATE TABLE Tokens (
 
 -- Token Usage History 테이블
 CREATE TABLE Token_Usage_History (
-    history_id BIGSERIAL PRIMARY KEY,
+    history_id SERIAL PRIMARY KEY,
     user_id UUID REFERENCES Users(user_id),
-    conversation_id CHAR(36) REFERENCES Conversations(conversation_id),
+    conversation_id UUID REFERENCES Conversations(conversation_id),
     tokens_used INTEGER NOT NULL DEFAULT 0,
     used_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -96,7 +100,7 @@ CREATE TABLE Subscription_Plans (
 
 -- User Subscriptions 테이블
 CREATE TABLE User_Subscriptions (
-    subscription_id BIGSERIAL PRIMARY KEY,
+    subscription_id SERIAL PRIMARY KEY,
     user_id UUID REFERENCES Users(user_id),
     plan_id INTEGER REFERENCES Subscription_Plans(plan_id),
     start_date DATE NOT NULL,
@@ -130,7 +134,7 @@ CREATE TABLE Coupons (
 
 -- Payments 테이블
 CREATE TABLE Payments (
-    payment_id BIGSERIAL PRIMARY KEY,
+    payment_id SERIAL PRIMARY KEY,
     user_id UUID REFERENCES Users(user_id),
     subscription_id BIGINT REFERENCES User_Subscriptions(subscription_id),
     token_plan_id INTEGER REFERENCES Token_Plans(token_plan_id),
@@ -190,7 +194,7 @@ CREATE TABLE User_Notice_Reads (
 
 -- Notifications 테이블
 CREATE TABLE Notifications (
-    notification_id BIGSERIAL PRIMARY KEY,
+    notification_id SERIAL PRIMARY KEY,
     user_id UUID REFERENCES Users(user_id),
     type VARCHAR(50) NOT NULL,
     message TEXT NOT NULL,
@@ -208,7 +212,7 @@ CREATE TABLE User_Notification_Settings (
 
 -- Inquiries 테이블
 CREATE TABLE Inquiries (
-    inquiry_id BIGSERIAL PRIMARY KEY,
+    inquiry_id SERIAL PRIMARY KEY,
     user_id UUID REFERENCES Users(user_id),
     type VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -223,7 +227,7 @@ CREATE TABLE Inquiries (
 
 -- Admin Logs 테이블
 CREATE TABLE Admin_Logs (
-    log_id BIGSERIAL PRIMARY KEY,
+    log_id SERIAL PRIMARY KEY,
     admin_id UUID REFERENCES Users(user_id),
     action VARCHAR(50) NOT NULL,
     target VARCHAR(255),
@@ -280,6 +284,7 @@ CREATE TABLE Banners (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     is_public BOOLEAN NOT NULL DEFAULT TRUE,
+    click_count INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -295,47 +300,50 @@ CREATE TABLE Terms_And_Conditions (
 
 -- ConversationFeedbacks 테이블
 CREATE TABLE Conversation_Feedbacks (
-    feedback_id BIGSERIAL PRIMARY KEY,
-    conversation_id CHAR(36) REFERENCES Conversations(conversation_id),
+    feedback_id SERIAL PRIMARY KEY,
+    conversation_id UUID REFERENCES Conversations(conversation_id),
     user_id UUID REFERENCES Users(user_id),
     rating feedback_rating,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- user_id 컬럼 타입 변경
+ALTER TABLE users ALTER COLUMN "user_id" SET DATA TYPE uuid;
+
 -- Users 테이블 mock 데이터
-INSERT INTO users (user_id, email, password, nickname, phone_number, birthdate, gender, status, role) VALUES
-('1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', 'user1@example.com', 'hashedpassword1', '사용자1', '01012345678', '1990-01-01', 'M', 'ACTIVE', 'USER'),
-('2c9e7bce-ccfe-5c3e-0c6e-bc9efcce5cfe', 'user2@example.com', 'hashedpassword2', '사용자2', '01023456789', '1992-02-02', 'F', 'ACTIVE', 'USER'),
-('3d0f8cdf-ddff-6d4f-1d7f-cd0fgddf6dgf', 'admin@example.com', 'hashedpassword3', '관리자', '01034567890', '1988-03-03', 'N', 'ACTIVE', 'ADMIN');
+INSERT INTO Users (user_id, email, password, nickname, phone_number, birthdate, gender, status, role) VALUES
+(uuid_generate_v4(), 'user1@example.com', 'hashedpassword1', '사용자1', '01012345678', '1990-01-01', 'M', 'ACTIVE', 'USER'),
+(uuid_generate_v4(), 'user2@example.com', 'hashedpassword2', '사용자2', '01023456789', '1992-02-02', 'F', 'ACTIVE', 'USER'),
+(uuid_generate_v4(), 'admin@example.com', 'hashedpassword3', '관리자', '01034567890', '1988-03-03', 'N', 'ACTIVE', 'ADMIN');
 
 -- Curators 테이블 mock 데이터
-INSERT INTO curators (name, profile_image, introduction, category) VALUES
+INSERT INTO Curators (name, profile_image, introduction, category) VALUES
 ('여행 전문가', 'travel_expert.jpg', '세계 각국의 숨은 명소를 소개합니다.', '여행'),
 ('문화 큐레이터', 'culture_curator.jpg', '다양한 문화 행사와 전시회 정보를 제공합니다.', '문화'),
 ('예술 가이드', 'art_guide.jpg', '현대 미술부터 고전 예술까지 폭넓게 다룹니다.', '예술');
 
 -- Conversations 테이블 mock 데이터
-INSERT INTO conversations (conversation_id, user_id, question, answer, question_time, answer_time, tokens_used) VALUES
-('4e1g9def-eeff-7e5g-2e8g-de1ghdef7ehg', '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', '파리에서 꼭 가봐야 할 곳은 어디인가요?', '파리에서 꼭 가봐야 할 곳은 에펠탑, 루브르 박물관, 개선문 등이 있습니다. 에펠탑은 파리의 상징적인 랜드마크로, 탑 위에서 파리 전경을 감상할 수 있습니다. 루브르 박물관은 세계적으로 유명한 미술관으로 모나리자 등 수많은 명작을 소장하고 있습니다. 개선문은 역사적 의미가 있는 건축물로, 그 주변의 샹젤리제 거리는 쇼핑과 카페 문화를 즐기기에 좋습니다.', '2023-09-15 10:00:00', '2023-09-15 10:00:30', 150),
-('5f2h0efg-ffgg-8f6h-3f9h-ef2hiefg8fih', '2c9e7bce-ccfe-5c3e-0c6e-bc9efcce5cfe', '현재 서울에서 열리는 주목할 만한 전시회가 있나요?', '서울에서는 현재 여러 주목할 만한 전시회가 열리고 있습니다. 국립현대미술관에서는 현대 미술의 흐름을 보여주는 "한국 현대미술의 지평" 전시가 진행 중입니다. 서울시립미술관에서는 세계적인 아티스트 데미안 허스트의 개인전 "Natural History"가 열리고 있어 많은 관심을 받고 있습니다. 또한, 예술의전당에서는 "빈센트 반 고흐: 새로운 시각" 전시가 열려 고흐의 작품을 새로운 관점에서 감상할 수 있습니다.', '2023-09-16 14:30:00', '2023-09-16 14:30:45', 180);
+INSERT INTO Conversations (conversation_id, user_id, question, answer, question_time, answer_time, tokens_used) VALUES
+(uuid_generate_v4(), (SELECT user_id FROM Users WHERE email='user1@example.com'), '파리에서 꼭 가봐야 할 곳은 어디인가요?', '파리에서 꼭 가봐야 할 곳은 에펠탑, 루브르 박물관, 개선문 등이 있습니다. 에펠탑은 파리의 상징적인 랜드마크로, 탑 위에서 파리 전경을 감상할 수 있습니다. 루브르 박물관은 세계적으로 유명한 미술관으로 모나리자 등 수많은 명작을 소장하고 있습니다. 개선문은 역사적 의미가 있는 건축물로, 그 주변의 샹젤리제 거리는 쇼핑과 카페 문화를 즐기기에 좋습니다.', '2023-09-15 10:00:00', '2023-09-15 10:00:30', 150),
+(uuid_generate_v4(), (SELECT user_id FROM Users WHERE email='user2@example.com'), '현재 서울에서 열리는 주목할 만한 전시회가 있나요?', '서울에서는 현재 여러 주목할 만한 전시회가 열리고 있습니다. 국립현대미술관에서는 현대 미술의 흐름을 보여주는 "한국 현대미술의 지평" 전시가 진행 중입니다. 서울시립미술관에서는 세계적인 아티스트 데미안 허스트의 개인전 "Natural History"가 열리고 있어 많은 관심을 받고 있습니다. 또한, 예술의전당에서는 "빈센트 반 고흐: 새로운 시각" 전시가 열려 고흐의 작품을 새로운 관점에서 감상할 수 있습니다.', '2023-09-16 14:30:00', '2023-09-16 14:30:45', 180);
 
 -- Subscription_Plans 테이블 mock 데이터
-INSERT INTO subscription_plans (plan_id, plan_name, price, discounted_price, tokens_included, description, is_promotion) VALUES
+INSERT INTO Subscription_Plans (plan_id, plan_name, price, discounted_price, tokens_included, description, is_promotion) VALUES
 (1, '정기 구독', 20000, 15000, 0, '정기구독 플랜입니다.', true);
 
 
 -- User_Subscriptions 테이블 mock 데이터
-INSERT INTO user_subscriptions (user_id, plan_id, start_date, next_billing_date, status) VALUES
-('1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', 1, '2023-09-01', '2023-10-01', 'ACTIVE'),
-('2c9e7bce-ccfe-5c3e-0c6e-bc9efcce5cfe', 1, '2023-08-15', '2023-09-15', 'ACTIVE');
+INSERT INTO User_Subscriptions (user_id, plan_id, start_date, next_billing_date, status) VALUES
+((SELECT user_id FROM Users WHERE email='user1@example.com'), 1, '2023-09-01', '2023-10-01', 'ACTIVE'),
+((SELECT user_id FROM Users WHERE email='user2@example.com'), 1, '2023-08-15', '2023-09-15', 'ACTIVE');
 
 -- Tokens 테이블 mock 데이터
-INSERT INTO tokens (user_id, total_tokens, used_tokens, last_charged_at, expires_at) VALUES
-('1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', 100, 30, '2023-09-01', '2023-10-01'),
-('2c9e7bce-ccfe-5c3e-0c6e-bc9efcce5cfe', 250, 80, '2023-08-15', '2023-09-15');
+INSERT INTO Tokens (user_id, total_tokens, used_tokens, last_charged_at, expires_at) VALUES
+((SELECT user_id FROM Users WHERE email='user1@example.com'), 100, 30, '2023-09-01', '2023-10-01'),
+((SELECT user_id FROM Users WHERE email='user2@example.com'), 250, 80, '2023-08-15', '2023-09-15');
 
 -- Notices 테이블 mock 데이터
-INSERT INTO notices (title, content, image_url, start_date, end_date, view_count, is_public) VALUES
+INSERT INTO Notices (title, content, image_url, start_date, end_date, view_count, is_public) VALUES
 ('서비스 업데이트 안내', '9월 20일부터 새로운 AI 모델이 적용됩니다. 더욱 정확하고 다양한 답변을 경험해보세요!', 'update_notice.jpg', '2023-09-15', '2023-09-30', 150, true),
 ('추석 연휴 고객센터 운영 안내', '추석 연휴 기간 동안 고객센터 운영 시간이 단축됩니다. 자세한 내용은 공지사항을 확인해주세요.', 'holiday_notice.jpg', '2023-09-25', '2023-10-05', 80, true);
 

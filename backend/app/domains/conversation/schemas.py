@@ -5,7 +5,16 @@ from uuid import UUID
 
 class ConversationCreate(BaseModel):
     question: str
-    question_image: Optional[HttpUrl] = None
+    question_image: Optional[str] = None
+
+    class Config:
+        allow_population_by_field_name = True
+        schema_extra = {
+            "example": {
+                "question": "What's in this image?",
+                "question_image": "/v1/images/example.png"
+            }
+        }
 
 class ConversationResponse(BaseModel):
     conversation_id: UUID
@@ -22,7 +31,7 @@ class ConversationDetail(BaseModel):
     conversation_id: UUID
     user_id: UUID
     question: str
-    question_image: Optional[HttpUrl]
+    question_image: Optional[str]
     answer: str
     question_time: datetime
     answer_time: datetime

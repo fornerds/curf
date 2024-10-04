@@ -97,7 +97,7 @@ class User(UserInDBBase):
     pass
 
 class UserInDB(UserInDBBase):
-    hashed_password: str
+    password: str
 
 class CorporateUserCreate(BaseModel):
     company_name: str

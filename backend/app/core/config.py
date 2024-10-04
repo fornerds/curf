@@ -1,5 +1,7 @@
 from pydantic import BaseSettings
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "cul.f"
@@ -14,6 +16,20 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
+
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    AWS_REGION: str
+    S3_BUCKET_NAME: str
+
+    OPENAI_API_KEY: str
+    OPENAI_ASSISTANT_ID: str
+
+    # 개발 모드 설정 추가
+    DEV_MODE: bool = False
+
+    CLOUDFRONT_DOMAIN: str
+    CLOUDFRONT_DISTRIBUTION_ID: str
 
     class Config:
         env_file = ".env"
