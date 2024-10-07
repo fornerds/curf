@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Custom ENUM types
 CREATE TYPE gender_enum AS ENUM ('M', 'F', 'N');
-CREATE TYPE status_enum AS ENUM ('ACTIVE', 'INACTIVE', 'BANNED', 'DELETE');
+CREATE TYPE status_enum AS ENUM ('ACTIVE', 'INACTIVE', 'BANNED', 'WITHDRAWN');
 CREATE TYPE role_enum AS ENUM ('USER', 'ADMIN');
 CREATE TYPE subscription_status AS ENUM ('ACTIVE', 'CANCELLED');
 CREATE TYPE payment_status AS ENUM ('SUCCESS', 'FAILED', 'CANCELLED', 'REFUNDED');

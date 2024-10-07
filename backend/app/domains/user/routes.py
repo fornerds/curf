@@ -72,6 +72,9 @@ def delete_user_me(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """
+    회원 탈퇴 요청
+    """
     user_services.delete_user(db, current_user.user_id, delete_info)
     return {"message": "회원 탈퇴가 완료되었습니다."}
 
