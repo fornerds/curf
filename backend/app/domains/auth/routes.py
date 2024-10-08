@@ -26,6 +26,12 @@ def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid user",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     access_token, refresh_token = auth_services.create_tokens(str(user.user_id))
 
     return auth_services.get_json_response(access_token,refresh_token)
