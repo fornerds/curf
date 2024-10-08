@@ -13,7 +13,7 @@ class Inquiry(Base):
     email = Column(String(255), nullable=False)
     contact = Column(String(20), nullable=False)
     content = Column(Text, nullable=False)
-    attachments = Column(JSONB)
+    attachments = Column(Text)
     status = Column(Enum('RECEIVED', 'IN_PROGRESS', 'COMPLETED', name='inquiry_status'), default='RECEIVED')
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 

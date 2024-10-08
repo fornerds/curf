@@ -25,7 +25,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> List[Type[User]]:
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     db_user = models.User(
         email=user.email,
-        hashed_password=get_password_hash(user.password),
+        password=get_password_hash(user.password),
         nickname=user.nickname,
         phone_number=user.phone_number,
         birthdate=user.birthdate,
@@ -54,7 +54,7 @@ def delete_user(db: Session, user_id: UUID, delete_info: schemas.UserDelete) -> 
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     db_user.status = 'WITHDRAWN'
-    db_user.withdrawal_reason = delete_info.reason
+    db_user.delete_reason = delete_info.reason
     # You might want to store the feedback separately
     db.add(db_user)
     db.commit()
@@ -66,6 +66,7 @@ def change_user_password(db: Session, user_id: UUID, new_password: str, new_pass
     if new_password != new_password_confirm:
         raise HTTPException(status_code=400,detail="New password and confirmation do not match.")
     db_user.hashed_password = get_password_hash(new_password)
+
     db.add(db_user)
     db.commit()
 
@@ -79,7 +80,7 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[models
     user = get_user_by_email(db, email)
     if not user:
         return None
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.password):
         return None
     return user
 

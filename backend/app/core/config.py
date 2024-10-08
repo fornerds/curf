@@ -1,5 +1,10 @@
 from pydantic import BaseSettings
+from dotenv import load_dotenv
+import os
 
+# 환경 변수에 따라 적절한 .env 파일 로드
+env_file = f".env.{os.environ.get('ENV', 'local')}"
+load_dotenv(env_file)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "cul.f"
@@ -9,11 +14,25 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 8  # 8 days
     ALGORITHM: str = "HS256"
 
-    DB_HOST: str
-    DB_PORT: int
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = os.getenv("DB_PORT")
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
+
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    AWS_REGION: str
+    S3_BUCKET_NAME: str
+
+    OPENAI_API_KEY: str
+    OPENAI_ASSISTANT_ID: str
+
+    # 개발 모드 설정 추가
+    DEV_MODE: bool = False
+
+    CLOUDFRONT_DOMAIN: str
+    CLOUDFRONT_DISTRIBUTION_ID: str
 
     class Config:
         env_file = ".env"

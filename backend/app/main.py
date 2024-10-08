@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from app.core.config import settings
 from app.domains.user import routes as user_routes
 from app.domains.conversation import routes as conversation_routes
@@ -10,8 +11,27 @@ from app.domains.terms import routes as terms_routes
 from app.domains.curator import routes as curator_routes
 from app.domains.banner import routes as banner_routes
 from app.domains.auth import routes as auth_routes
+from app.domains.admin import routes as admin_routes
+import logging
 
-app = FastAPI(title=settings.PROJECT_NAME)
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    description="""
+    cul.f API 서비스
+
+    주요 기능:
+    - 사용자 인증 및 관리
+    - 대화 생성 (텍스트 및 이미지 업로드 지원)
+    - 토큰 관리
+    - 알림 관리
+    - 관리자 기능
+    """,
+    version="1.0.0"
+)
 
 app.include_router(curator_routes.router, prefix=f"{settings.API_V1_STR}", tags=["curators"])
 app.include_router(banner_routes.router, prefix=f"{settings.API_V1_STR}", tags=["banners"])
@@ -23,15 +43,20 @@ app.include_router(conversation_routes.router, prefix=f"{settings.API_V1_STR}", 
 app.include_router(token_routes.router, prefix=f"{settings.API_V1_STR}", tags=["tokens"])
 app.include_router(notification_routes.router, prefix=f"{settings.API_V1_STR}", tags=["notifications"])
 app.include_router(inquiry_routes.router, prefix=f"{settings.API_V1_STR}", tags=["inquiries"])
+app.include_router(admin_routes.router, prefix=f"{settings.API_V1_STR}/admin", tags=["admin"])
 
 @app.get("/")
 def read_root():
     return {"message": "Welcome to cul.f API"}
 
-# Health check endpoint
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+if settings.DEV_MODE:
+    logger.warning("Running in DEVELOPMENT MODE. Authentication is disabled.")
+else:
+    logger.info("Running in PRODUCTION MODE.")
 
 # API documentation customization
 app.title = "cul.f API"

@@ -9,7 +9,12 @@ router = APIRouter()
 
 @router.get("/curators", response_model=List[curator_schemas.Curator])
 def get_curators(
-    category: Optional[str] = Query(None, description="Curator category"),
+    category: Optional[str] = Query(None, description="Curator category (e.g., travel, culture, art)"),
     db: Session = Depends(get_db)
 ):
+    """
+    큐레이터 목록 조회
+
+    - **category**: 큐레이터 카테고리 (선택)
+    """
     return curator_services.get_curators(db, category)
