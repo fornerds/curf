@@ -14,6 +14,23 @@ from datetime import timedelta
 
 router = APIRouter()
 
+
+@router.post("/form/login")
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    user = auth_services.authenticate_user(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token, refresh_token = auth_services.create_tokens(str(user.user_id))
+
+    return auth_services.get_json_response(access_token,refresh_token)
+
 @router.post("/login")
 def login(
     login_data: auth_schemas.EmailPasswordLogin,
@@ -61,11 +78,11 @@ async def logout():
     response.delete_cookie("refresh_token")
     return response
 
-@router.get("/me", response_model=user_schemas.User)
+@router.get("/auth/me", response_model=user_schemas.User)
 def read_users_me(current_user: user_schemas.User = Depends(get_current_user)):
     return current_user
 
-@router.put("/me", response_model=user_schemas.User)
+@router.put("/auth/me", response_model=user_schemas.User)
 def update_user_me(
     user_in: user_schemas.UserUpdate,
     db: Session = Depends(get_db),

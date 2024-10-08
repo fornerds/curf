@@ -67,9 +67,12 @@ class UserDelete(BaseModel):
 class UserDeleteResponse(BaseModel):
     message: str
 
-class PasswordChange(BaseModel):
+class PasswordCheck(BaseModel):
     current_password: str
+
+class PasswordChange(BaseModel):
     new_password: str
+    new_password_confirm: str
 
 class PasswordChangeResponse(BaseModel):
     message: str
@@ -83,6 +86,7 @@ class TokenInfo(BaseModel):
 
 class UserInDBBase(UserBase):
     user_id: UUID
+    hashed_password:str
     created_at: datetime
     updated_at: datetime
     last_login_at: Optional[datetime]

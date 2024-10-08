@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.core.deps import get_current_user
@@ -63,6 +63,9 @@ def update_user_me(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """
+    회원 정보 수정 API, 전화번호와 닉네임을 수정한다.
+    """
     updated_user = user_services.update_user(db, current_user.user_id, user_update)
     return {"message": "회원정보가 수정되었습니다."}
 
@@ -75,18 +78,23 @@ def delete_user_me(
     user_services.delete_user(db, current_user.user_id, delete_info)
     return {"message": "회원 탈퇴가 완료되었습니다."}
 
+@router.post("/me/password", response_model=user_schemas.PasswordChangeResponse)
+def change_password(
+    password_check: user_schemas.PasswordCheck,
+    current_user: user_schemas.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if not user_services.verify_password(plain_password=password_check.current_password, hashed_password=current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="incorrect_password")
+    return {"message": "비밀번호가 확인됐습니다."}
+
 @router.put("/me/password", response_model=user_schemas.PasswordChangeResponse)
 def change_password(
     password_change: user_schemas.PasswordChange,
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    if not user_services.verify_password(password_change.current_password, current_user.password):
-        raise HTTPException(status_code=400, detail={
-            "error": "incorrect_password",
-            "message": "현재 비밀번호가 일치하지 않습니다."
-        })
-    user_services.change_user_password(db, current_user.user_id, password_change.new_password)
+    user_services.change_user_password(db, current_user.user_id, password_change.new_password, password_change.new_password_confirm)
     return {"message": "비밀번호가 성공적으로 변경되었습니다."}
 
 @router.get("/me/tokens", response_model=user_schemas.TokenInfo)
