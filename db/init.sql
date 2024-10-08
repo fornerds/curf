@@ -66,12 +66,12 @@ CREATE TABLE Conversations (
 );
 
 -- Tokens 테이블
-CREATE TABLE Tokens (
-    token_id SERIAL PRIMARY KEY,
-    user_id UUID REFERENCES Users(user_id),
+CREATE TABLE tokens (
+    token_id SERIAL PRIMARY KEY,  -- autoincrement를 위한 SERIAL 추가
+    user_id UUID NOT NULL UNIQUE REFERENCES users(user_id), -- UUID는 unique constraint 적용
     total_tokens INTEGER NOT NULL DEFAULT 0,
     used_tokens INTEGER NOT NULL DEFAULT 0,
-    last_charged_at TIMESTAMP,
+    last_charged_at TIMESTAMPTZ,  -- 시간대를 포함한 TIMESTAMP
     expires_at DATE
 );
 

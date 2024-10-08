@@ -1,6 +1,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from . import models, schemas
+from app.domains.subscription.models import SubscriptionPlan, UserSubscription
 from app.core.security import get_password_hash, verify_password
 from typing import List, Optional, Type
 from uuid import UUID
@@ -60,18 +61,22 @@ def delete_user(db: Session, user_id: UUID, delete_info: schemas.UserDelete) -> 
     db.add(db_user)
     db.commit()
 
-def change_user_password(db: Session, user_id: UUID, new_password: str) -> None:
+def change_user_password(db: Session, user_id: UUID, new_password: str, new_password_confirm: str) -> None:
     db_user = get_user(db, user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    db_user.password = get_password_hash(new_password)
+    if new_password != new_password_confirm:
+        raise HTTPException(status_code=400,detail="New password and confirmation do not match.")
+    db_user.hashed_password = get_password_hash(new_password)
+
     db.add(db_user)
     db.commit()
 
-def get_user_subscription(db: Session, user_id: UUID) -> Optional[dict]:
-    # Implement this function to get user's subscription info
-    # You might need to create a new model for subscriptions
-    pass
+def get_user_subscription(db: Session, user_id: UUID) -> Optional[UserSubscription]:
+    return  (db.query(UserSubscription)
+            .filter(UserSubscription.user_id == user_id)
+            .order_by(UserSubscription.start_date.desc())
+            .first())
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[models.User]:
     user = get_user_by_email(db, email)
