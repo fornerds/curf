@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from . import models, schemas
 from app.domains.subscription.models import SubscriptionPlan, UserSubscription
@@ -55,6 +56,7 @@ def delete_user(db: Session, user_id: UUID, delete_info: schemas.UserDelete) -> 
         raise HTTPException(status_code=404, detail="User not found")
     db_user.status = 'WITHDRAWN'
     db_user.delete_reason = delete_info.reason
+    db_user.deleted_at = func.now()
     # You might want to store the feedback separately
     db.add(db_user)
     db.commit()

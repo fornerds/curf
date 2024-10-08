@@ -17,23 +17,24 @@ async def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ) -> user_schemas.User:
     if settings.DEV_MODE:
-        logging.warning("Using dev mode authentication")
-        dev_email = "dev@example.com"
-        dev_user = services.get_user_by_email(db, email=dev_email)
-        if not dev_user:
-            dev_user = user_services.create_user(db, user_schemas.UserCreate(
-                email=dev_email,
-                password="devpassword",
-                password_confirmation="devpassword",
-                nickname="DevAdmin",
-                birthdate=date(1990, 1, 1),
-                gender="N",
-                phone_number="1234567890",
-                marketing_agreed=False
-            ))
-            dev_user.role = 'ADMIN'
-            db.commit()
-        return dev_user
+        if not token:
+            logging.warning("Using dev mode authentication")
+            dev_email = "dev@example.com"
+            dev_user = services.get_user_by_email(db, email=dev_email)
+            if not dev_user:
+                dev_user = user_services.create_user(db, user_schemas.UserCreate(
+                    email=dev_email,
+                    password="devpassword",
+                    password_confirmation="devpassword",
+                    nickname="DevAdmin",
+                    birthdate=date(1990, 1, 1),
+                    gender="N",
+                    phone_number="1234567890",
+                    marketing_agreed=False
+                ))
+                dev_user.role = 'ADMIN'
+                db.commit()
+            return dev_user
 
     if not token:
         raise HTTPException(

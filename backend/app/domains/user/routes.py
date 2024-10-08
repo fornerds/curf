@@ -13,10 +13,11 @@ router = APIRouter()
 def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = user_services.get_user_by_email(db, email=user.email)
     if db_user:
+        detail_message = "사용할 수 없는 이메일입니다." if db_user.status == 'WITHDRAWN' else "이미 등록된 이메일 주소입니다."
         raise HTTPException(status_code=400, detail={
             "error": "validation_error",
             "message": "입력 정보가 올바르지 않습니다.",
-            "details": [{"field": "email", "message": "이미 등록된 이메일 주소입니다."}]
+            "details": [{"field": "email", "message": detail_message}]
         })
     db_user = user_services.get_user_by_nickname(db, nickname=user.nickname)
     if db_user:
@@ -40,10 +41,17 @@ def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
         })
     new_user = user_services.create_user(db=db, user=user)
     return {"user_id": new_user.user_id, "message": "회원가입이 완료되었습니다."}
-
 @router.get("/me", response_model=user_schemas.UserInfo)
 def read_user_me(current_user: user_schemas.User = Depends(get_current_user), db: Session = Depends(get_db)):
     user = user_services.get_user(db, user_id=current_user.user_id)
+    
+    # Check user status
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(status_code=403, detail={
+            "error": "user_withdrawn",
+            "message": "탈퇴한 회원입니다."
+        })
+
     tokens = token_services.get_user_tokens(db, current_user.user_id)
     subscription = user_services.get_user_subscription(db, current_user.user_id)
     return {
@@ -63,6 +71,15 @@ def update_user_me(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    user = user_services.get_user(db, user_id=current_user.user_id)
+    
+    # Check user status
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(status_code=403, detail={
+            "error": "user_withdrawn",
+            "message": "탈퇴한 회원입니다."
+        })
+
     """
     회원 정보 수정 API, 전화번호와 닉네임을 수정한다.
     """
@@ -75,6 +92,18 @@ def delete_user_me(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """
+    회원 탈퇴 요청
+    """
+    user = user_services.get_user(db, user_id=current_user.user_id)
+    
+    # Check user status
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(status_code=403, detail={
+            "error": "user_withdrawn",
+            "message": "탈퇴한 회원입니다."
+        })
+
     user_services.delete_user(db, current_user.user_id, delete_info)
     return {"message": "회원 탈퇴가 완료되었습니다."}
 
@@ -94,6 +123,20 @@ def change_password(
     current_user: user_schemas.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    user = user_services.get_user(db, user_id=current_user.user_id)
+    
+    # Check user status
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(status_code=403, detail={
+            "error": "user_withdrawn",
+            "message": "탈퇴한 회원입니다."
+        })
+
+    if not user_services.verify_password(password_change.current_password, current_user.password):
+        raise HTTPException(status_code=400, detail={
+            "error": "incorrect_password",
+            "message": "현재 비밀번호가 일치하지 않습니다."
+        })
     user_services.change_user_password(db, current_user.user_id, password_change.new_password, password_change.new_password_confirm)
     return {"message": "비밀번호가 성공적으로 변경되었습니다."}
 
@@ -102,6 +145,15 @@ def get_user_tokens(
     db: Session = Depends(get_db),
     current_user: user_schemas.User = Depends(get_current_user)
 ):
+    user = user_services.get_user(db, user_id=current_user.user_id)
+    
+    # Check user status
+    if user.status == 'WITHDRAWN':
+        raise HTTPException(status_code=403, detail={
+            "error": "user_withdrawn",
+            "message": "탈퇴한 회원입니다."
+        })
+
     user_tokens = token_services.get_user_tokens(db, current_user.user_id)
     return user_schemas.TokenInfo(
         total_tokens=user_tokens.total_tokens,
