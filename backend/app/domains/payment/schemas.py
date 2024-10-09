@@ -72,6 +72,17 @@ class KakaoPayRequest(BaseModel):
     quantity: int
     total_amount: float
     user_id: int
+    plan_id: Optional[int] 
+
+class KakaoPaySubscriptionRequest(BaseModel):
+    partner_order_id: str
+    partner_user_id: str
+    item_name: str
+    quantity: int
+    total_amount: float
+    user_id: int
+    plan_id: int  
+    sid: Optional[str]  
 
 class KakaoPayApproval(BaseModel):
     aid: str
@@ -89,10 +100,3 @@ class KakaoPayRefundRequest(BaseModel):
     payment_id: int
     amount: float
     reason: Optional[str]
-
-class KakaoPaySubscriptionRequest(BaseModel):
-    partner_order_id: str
-    partner_user_id: str
-    item_name: str
-    quantity: int
-    total_amount: float

@@ -8,7 +8,7 @@ class Payment(Base):
     __tablename__ = 'payments'
 
     payment_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.user_id', ondelete="CASCADE"), nullable=False)
     subscription_id = Column(Integer, ForeignKey('subscriptions.subscription_id'), nullable=True)
     token_plan_id = Column(Integer, ForeignKey('token_plans.token_plan_id'), nullable=True)
     payment_number = Column(String(20), unique=True, nullable=False)
@@ -34,7 +34,7 @@ class Refund(Base):
 
     refund_id = Column(Integer, primary_key=True, autoincrement=True)
     payment_id = Column(Integer, ForeignKey('payments.payment_id'), nullable=False)
-    user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.user_id', ondelete="CASCADE"), nullable=False)
     amount = Column(Float, nullable=False, default=0)
     reason = Column(String, nullable=True)
     status = Column(Enum('PENDING', 'APPROVED', 'REJECTED'), nullable=False, default='PENDING')
@@ -64,7 +64,7 @@ class Coupon(Base):
 class UserCoupon(Base):
     __tablename__ = 'user_coupons'
 
-    user_id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.user_id', ondelete="CASCADE"), nullable=False)
     coupon_id = Column(Integer, primary_key=True)
     used_at = Column(TIMESTAMP, nullable=True)
 

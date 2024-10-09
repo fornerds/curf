@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from schemas import PaymentCreate, PaymentResponse, RefundBase, RefundResponse, CouponBase, CouponResponse, UserCouponBase, UserCouponResponse, KakaoPayRequest, KakaoPayRefundRequest, KakaoPaySubscriptionRequest
+from ..subscription.models import SubscriptionPlan
+from schemas import PaymentCreate, PaymentResponse, RefundBase, RefundResponse, CouponBase, CouponResponse, UserCouponBase, UserCouponResponse, KakaoPayRequest, KakaoPayRefundRequest, KakaoPaySubscriptionRequest,KakaoPayApproval
 from services import PaymentService
 from app.db.session import get_db
 from kakaopay_service import KakaoPayService
@@ -34,7 +35,7 @@ def cancel_payment(payment_id: int, reason: str, db: Session = Depends(get_db)):
     if not payment:
         raise HTTPException(status_code=404, detail="Payment not found")
     return {"message": "Payment cancelled successfully", "payment": payment}
-ㄴ
+
 # 환불 관련 엔드포인트
 @router.post("/refunds", response_model=RefundResponse)
 def create_refund(refund_data: RefundBase, db: Session = Depends(get_db)):
@@ -88,14 +89,18 @@ def use_coupon(user_coupon_data: UserCouponBase, db: Session = Depends(get_db)):
 # .env 파일 로드
 load_dotenv()
 
-# 카카오페이 서비스 객체 생성
 kakao_service = KakaoPayService()
 
 @router.post("/pay")
 async def initiate_payment(payment_request: KakaoPayRequest, db: Session = Depends(get_db)):
     try:
-        payment_urls = kakao_service.initiate_payment(payment_request, db)
-        return payment_urls
+        # 구독 플랜 정보를 데이터베이스에서 가져옴
+        plan = db.query(SubscriptionPlan).filter(SubscriptionPlan.plan_id == payment_request.plan_id).first()
+        if not plan:
+            raise HTTPException(status_code=404, detail="Subscription plan not found")
+        
+        payment_url = kakao_service.initiate_payment(payment_request, db, plan)
+        return {"redirect_url": payment_url}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -115,19 +120,24 @@ async def request_refund(refund_request: KakaoPayRefundRequest, db: Session = De
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/subscription/start")
-async def start_subscription(subscription_request: KakaoPaySubscriptionRequest, db: Session = Depends(get_db)):
+@router.post("/subscription")
+async def initiate_subscription(subscription_request: KakaoPaySubscriptionRequest, db: Session = Depends(get_db)):
     try:
-        subscription_response = kakao_service.start_subscription(subscription_request, db)
-        return subscription_response
+        # 구독 플랜 정보를 데이터베이스에서 가져옴
+        plan = db.query(SubscriptionPlan).filter(SubscriptionPlan.plan_id == subscription_request.plan_id).first()
+        if not plan:
+            raise HTTPException(status_code=404, detail="Subscription plan not found")
+
+        sid = kakao_service.initiate_subscription(subscription_request, db, plan)
+        return {"sid": sid}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
+    
 @router.post("/subscription/pay")
-async def pay_subscription(sid: str, db: Session = Depends(get_db)):
+async def pay_subscription(subscription_request: KakaoPaySubscriptionRequest, db: Session = Depends(get_db)):
     try:
-        payment_response = kakao_service.pay_subscription(sid, db)
-        return payment_response
+        payment_result = kakao_service.pay_subscription(subscription_request, db)
+        return payment_result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
